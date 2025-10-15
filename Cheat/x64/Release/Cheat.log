@@ -1,0 +1,26 @@
+﻿  movement.cpp
+  Aimbot.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Rage\Aimbot.cpp(111,71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Rage\Aimbot.cpp(112,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  HookSDK.cpp
+  Incluindo hook_sdk.h em HookSDK.cpp
+  Hooks.cpp
+  kiero.cpp
+  imgui_impl_dx11.cpp
+  imgui_impl_dx9.cpp
+  imgui_impl_win32.cpp
+  imgui.cpp
+  imgui_draw.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  Menu.cpp
+  main.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\main.cpp(36,17): warning C4193: #pragma warning(pop): no matching '#pragma warning(push)'
+  Memory.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Memory\Memory.cpp(25,28): warning C4311: 'type cast': pointer truncation from 'BYTE *' to 'DWORD'
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Memory\Memory.cpp(25,28): warning C4302: 'type cast': truncation from 'BYTE *' to 'DWORD'
+HookSDK.obj : error LNK2001: unresolved external symbol MH_CreateHook
+HookSDK.obj : error LNK2001: unresolved external symbol MH_EnableHook
+Hooks.obj : error LNK2001: unresolved external symbol MH_Initialize
+kiero.obj : error LNK2001: unresolved external symbol MH_DisableHook
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\x64\Release\Cheat.exe : fatal error LNK1120: 4 unresolved externals

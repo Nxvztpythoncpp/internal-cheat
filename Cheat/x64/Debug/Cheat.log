@@ -1,0 +1,13 @@
+﻿  Aimbot.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Rage\Aimbot.cpp(100,71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Rage\Aimbot.cpp(101,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  HookSDK.cpp
+  Incluindo hook_sdk.h em HookSDK.cpp
+  Hooks.cpp
+  Menu.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Menu\Menu.cpp(10,16): error C1075: '{': no matching token found
+  main.cpp
+  Memory.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Memory\Memory.cpp(25,28): warning C4311: 'type cast': pointer truncation from 'BYTE *' to 'DWORD'
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Memory\Memory.cpp(25,28): warning C4302: 'type cast': truncation from 'BYTE *' to 'DWORD'
+  Generating Code...

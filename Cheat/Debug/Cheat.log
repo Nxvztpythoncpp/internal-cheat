@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\main.cpp(36,17): warning C4193: #pragma warning(pop): no matching '#pragma warning(push)'
+  Cheat.vcxproj -> C:\Users\warzo\Documents\GitHub\Internal-CSGO\Debug\Cheat.exe
