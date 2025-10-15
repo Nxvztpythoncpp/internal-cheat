@@ -1,13 +1,34 @@
-﻿  Aimbot.cpp
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Rage\Aimbot.cpp(100,71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Rage\Aimbot.cpp(101,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+﻿  movement.cpp
+  Aimbot.cpp
+  Visuals.cpp
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Cheats\Rage\Aimbot.cpp(104,71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Cheats\Rage\Aimbot.cpp(105,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   HookSDK.cpp
   Incluindo hook_sdk.h em HookSDK.cpp
   Hooks.cpp
+  kiero.cpp
+  imgui_impl_dx11.cpp
+  imgui_impl_dx9.cpp
+  imgui_impl_win32.cpp
+  imgui.cpp
+  imgui_draw.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
   Menu.cpp
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Menu\Menu.cpp(10,16): error C1075: '{': no matching token found
   main.cpp
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\main.cpp(36,17): warning C4193: #pragma warning(pop): no matching '#pragma warning(push)'
   Memory.cpp
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Memory\Memory.cpp(25,28): warning C4311: 'type cast': pointer truncation from 'BYTE *' to 'DWORD'
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Memory\Memory.cpp(25,28): warning C4302: 'type cast': truncation from 'BYTE *' to 'DWORD'
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Memory\Memory.cpp(25,28): warning C4311: 'type cast': pointer truncation from 'BYTE *' to 'DWORD'
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Memory\Memory.cpp(25,28): warning C4302: 'type cast': truncation from 'BYTE *' to 'DWORD'
   Generating Code...
+HookSDK.obj : error LNK2019: unresolved external symbol MH_CreateHook referenced in function "void __cdecl SetupSDKHooks(void)" (?SetupSDKHooks@@YAXXZ)
+Hooks.obj : error LNK2001: unresolved external symbol MH_CreateHook
+kiero.obj : error LNK2001: unresolved external symbol MH_CreateHook
+HookSDK.obj : error LNK2019: unresolved external symbol MH_EnableHook referenced in function "void __cdecl SetupSDKHooks(void)" (?SetupSDKHooks@@YAXXZ)
+Hooks.obj : error LNK2001: unresolved external symbol MH_EnableHook
+kiero.obj : error LNK2001: unresolved external symbol MH_EnableHook
+Hooks.obj : error LNK2019: unresolved external symbol MH_Initialize referenced in function "void __cdecl Initialize(struct HINSTANCE__ *)" (?Initialize@@YAXPEAUHINSTANCE__@@@Z)
+kiero.obj : error LNK2001: unresolved external symbol MH_Initialize
+kiero.obj : error LNK2019: unresolved external symbol MH_DisableHook referenced in function "void __cdecl kiero::shutdown(void)" (?shutdown@kiero@@YAXXZ)
+Dependencies\MinHook\MinHook.x86.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\warzo\Documents\GitHub\internal-cheat\x64\Debug\Cheat.exe : fatal error LNK1120: 4 unresolved externals

@@ -2,71 +2,71 @@
 #include "Visuals.h"
 #include "../../Memory/Memory.h"
 #include "../../Memory/Offsets.h"
+#include <cstddef>
 
 namespace Visuals {
     // Define the variables declared in the header
-    bool glowEnabled = false;
-    bool glowThroughWalls = true;                      // true = glow visible through walls by default
-    float glowColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };      // default glow color: red (RGBA)
+    bool Visuals::glowEnabled = false;
+    bool Visuals::glowThroughWalls = false;
+    float Visuals::glowColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };      // default glow color: red (RGBA)
 
     void Glow() {
-        if (!glowEnabled) return;  // Only run if glow ESP is enabled
+        if (!glowEnabled)
+            return;
+        // Ensure the client module base address is initialized
+        if (Memory::clientDll == 0)
+            return;
 
-        // Get local player base address
-        uintptr_t localPlayer = Memory::Read<uintptr_t>((uintptr_t)Memory::clientDll + offsets::dwLocalPlayer);
-        if (!localPlayer) return;
+        // Get pointer to the glow object manager
+        std::uintptr_t glowManagerPtr = Memory::Read<std::uintptr_t>(Memory::clientDll + offsets::dwGlowObjectManager);
+        if (!glowManagerPtr)
+            return;  // glow manager not found, skip
 
-        // Get pointer to the Glow Object Manager
-        uintptr_t glowManager = Memory::Read<uintptr_t>((uintptr_t)Memory::clientDll + offsets::dwGlowObjectManager);
-        if (!glowManager) return;
+        // Get the local player for team checks
+        std::uintptr_t localPlayer = Memory::Read<std::uintptr_t>(Memory::clientDll + offsets::dwLocalPlayer);
+        int localTeam = localPlayer ? Memory::Read<int>(localPlayer + offsets::m_iTeamNum) : -1;
 
-        // Read local player's team (to differentiate enemies)
-        int localTeam = Memory::Read<int>(localPlayer + offsets::m_iTeamNum);
-
-        // Loop through player entities (1-32)
-        for (int i = 1; i <= 32; ++i) {
-            uintptr_t entity = Memory::Read<uintptr_t>((uintptr_t)Memory::clientDll + offsets::dwEntityList + i * 0x10);
+        // Iterate through player entities (1 to 64 max)
+        for (int i = 1; i <= 64; ++i) {
+            std::uintptr_t entity = Memory::Read<std::uintptr_t>(Memory::clientDll + offsets::dwEntityList + i * 0x10);
             if (!entity) continue;
 
-            // Basic validity checks (health and dormancy)
-            int health = Memory::Read<int>(entity + offsets::m_iHealth);
-            if (health <= 0) continue;  // dead or not a player
+            // Skip dormant entities
             bool dormant = Memory::Read<bool>(entity + offsets::m_bDormant);
-            if (dormant) continue;      // skip dormant entities
-
-            // Team check – skip if entity is on the same team (only glow enemies)
+            if (dormant) continue;
+            // Only glow enemies (skip if same team as local or no local player)
             int entityTeam = Memory::Read<int>(entity + offsets::m_iTeamNum);
-            if (entityTeam == localTeam) continue;
+            if (entityTeam == localTeam || entityTeam == 0) continue;
+            // Skip dead entities
+            int health = Memory::Read<int>(entity + offsets::m_iHealth);
+            if (health < 1) continue;
 
-            // Visibility check – if glowThroughWalls is false, only glow if the enemy is visible
-            if (!glowThroughWalls) {
-                uint32_t spottedMask = Memory::Read<uint32_t>(entity + offsets::m_bSpottedByMask);
-                int localIndex = Memory::Read<int>(localPlayer + 0x64);  // local player index
-                bool visible = (spottedMask & (1 << (localIndex - 1))) != 0;
-                if (!visible) continue;  // skip this entity if not visible and we only want visible glow
-            }
-
-            // Get the glow index for this entity
+            // Get this entity's glow index
             int glowIndex = Memory::Read<int>(entity + offsets::m_iGlowIndex);
-            if (glowIndex < 0) continue;  // invalid glow index
+            if (glowIndex < 0) continue;
 
-            // Write the glow color into the glow array for this entity
-            // Each glow object is 0x38 bytes in size; color RGBA starts at offset 0x4 in the glow object structure:contentReference[oaicite:0]{index=0}.
-            Memory::Write<float>(glowManager + glowIndex * 0x38 + 0x4, glowColor[0]);  // R
-            Memory::Write<float>(glowManager + glowIndex * 0x38 + 0x8, glowColor[1]);  // G
-            Memory::Write<float>(glowManager + glowIndex * 0x38 + 0xC, glowColor[2]);  // B
-            Memory::Write<float>(glowManager + glowIndex * 0x38 + 0x10, glowColor[3]);  // A
+            constexpr std::size_t GLOW_OBJECT_SIZE = 0x38;       // Each glow object is 0x38 bytes
+            constexpr std::uintptr_t GLOW_COLOR_OFFSET = 0x8;    // Offset to glow color Vector (R at +0x8)
+            constexpr std::uintptr_t GLOW_ALPHA_OFFSET = 0x14;   // Offset to glow alpha value
+            constexpr std::uintptr_t GLOW_OCCLUDED_OFFSET = 0x28;    // bool m_bRenderWhenOccluded
+            constexpr std::uintptr_t GLOW_UNOCCLUDED_OFFSET = 0x29;  // bool m_bRenderWhenUnoccluded
+            constexpr std::uintptr_t GLOW_FULLBLOOM_OFFSET = 0x2A;   // bool m_bFullBloomRender
+            constexpr std::uintptr_t GLOW_STYLE_OFFSET = 0x30;   // int m_nRenderStyle
+            constexpr std::uintptr_t GLOW_ALPHA_MAX_OFFSET = 0x20;
 
-            // Set glow render flags – whether to glow when occluded and unoccluded
-            // 0x24 and 0x25 are the offsets for m_bRenderWhenOccluded and m_bRenderWhenUnoccluded:contentReference[oaicite:1]{index=1}.
-            bool occluded = true;     // render glow when occluded (behind walls)
-            bool unoccluded = true;   // render glow when unoccluded (visible normally)
-            if (!glowThroughWalls) {
-                occluded = false;   // if we only want visible glow, disable glow through walls
-                unoccluded = true;    // still glow when the entity is visible
-            }
-            Memory::Write<bool>(glowManager + glowIndex * 0x38 + 0x24, occluded);
-            Memory::Write<bool>(glowManager + glowIndex * 0x38 + 0x25, unoccluded);
+            // Compute address of this entity's GlowObjectDefinition in the glow array
+            std::uintptr_t glowObject = glowManagerPtr + glowIndex * GLOW_OBJECT_SIZE;
+            // Write glow color (RGBA) from our config color
+            Memory::Write<float>(glowObject + GLOW_COLOR_OFFSET + 0x0, glowColor[0]);  // R
+            Memory::Write<float>(glowObject + GLOW_COLOR_OFFSET + 0x4, glowColor[1]);  // G
+            Memory::Write<float>(glowObject + GLOW_COLOR_OFFSET + 0x8, glowColor[2]);  // B
+            Memory::Write<float>(glowObject + GLOW_ALPHA_OFFSET, glowColor[3]);  // Alpha (transparency)
+            // Set render style and behavior flags
+            Memory::Write<bool>(glowObject + GLOW_OCCLUDED_OFFSET, true);                     // Render when occluded (behind walls)
+            Memory::Write<bool>(glowObject + GLOW_UNOCCLUDED_OFFSET, glowThroughWalls ? true : true);  // Always render when visible; we keep this true
+            Memory::Write<bool>(glowObject + GLOW_FULLBLOOM_OFFSET, false);                    // No full-bloom glow
+            Memory::Write<int>(glowObject + GLOW_STYLE_OFFSET, 0);                        // Glow style 0 (default outline)
+            Memory::Write<float>(glowObject + GLOW_ALPHA_MAX_OFFSET, 1.0f);                     // Max glow alpha
         }
     }
 }
