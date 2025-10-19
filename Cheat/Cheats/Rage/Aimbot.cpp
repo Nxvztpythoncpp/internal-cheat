@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cstdint>
 #include <Windows.h>
+#include <stdio.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -21,11 +22,14 @@ namespace Aimbot {
     int aim_bone = 8;
     float smooth_factor = 10.0f;
 
+
+
     bool IsKeyPressed(int key) {
         return (GetAsyncKeyState(key) & 0x8000) != 0;
     }
 
     static uintptr_t GetClientStatePtr() {
+        // Continua a usar engineDll + dwClientState (mantive a sua lógica original)
         uintptr_t clientStatePtr = Memory::Read<uintptr_t>((uintptr_t)Memory::engineDll + offsets::dwClientState);
         return clientStatePtr;
     }
@@ -44,6 +48,7 @@ namespace Aimbot {
     }
 
     void Run() {
+        printf("Debugging Window:\n");
         OutputDebugStringA(" Aimbot::Run() trigger\n");
 
         if (!enabled) return;
@@ -52,8 +57,8 @@ namespace Aimbot {
         uintptr_t localPlayer = Memory::Read<uintptr_t>((uintptr_t)Memory::clientDll + offsets::dwLocalPlayer);
         if (!localPlayer) return;
 
-        int bestTarget = GetBestTarget(fov);
-        if (bestTarget == -1) return;
+        uintptr_t bestTarget = GetBestTarget(fov);
+        if (bestTarget == 0) return;
 
         Vector localEyePos = Memory::Read<Vector>(localPlayer + offsets::m_vecOrigin) +
             Memory::Read<Vector>(localPlayer + offsets::m_vecViewOffset);
@@ -69,14 +74,18 @@ namespace Aimbot {
 
         Vector currentAnglesVec = Memory::Read<Vector>(clientState + offsets::dwClientState_ViewAngles);
         QAngle currentAngles = VectorToQAngle(currentAnglesVec);
+
+        // Smooth the aimAngle towards the current view
         SmoothAngle(currentAngles, aimAngle, smooth_factor);
 
         if (!silent) {
+            // Write the (possivelmente) suavizado aimAngle para viewangles do clientState
             Memory::Write<Vector>(clientState + offsets::dwClientState_ViewAngles, QAngleToVector(aimAngle));
         }
     }
 
     void OnCreateMove() {
+
         OutputDebugStringA("OnCreateMove() triggered\n");
 
         if (!enabled || !silent) return;
@@ -85,8 +94,8 @@ namespace Aimbot {
         uintptr_t localPlayer = Memory::Read<uintptr_t>((uintptr_t)Memory::clientDll + offsets::dwLocalPlayer);
         if (!localPlayer) return;
 
-        int bestTarget = GetBestTarget(fov);
-        if (bestTarget == -1) return;
+        uintptr_t bestTarget = GetBestTarget(fov);
+        if (bestTarget == 0) return;
 
         Vector localEyePos = Memory::Read<Vector>(localPlayer + offsets::m_vecOrigin) +
             Memory::Read<Vector>(localPlayer + offsets::m_vecViewOffset);
@@ -96,6 +105,8 @@ namespace Aimbot {
 
         ApplyRecoilControl(localPlayer, aimAngle);
         ClampAngles(aimAngle);
+
+
     }
 
     QAngle CalculateAngle(const Vector& source, const Vector& destination) {
@@ -123,48 +134,50 @@ namespace Aimbot {
         ClampAngles(target);
     }
 
-    int GetBestTarget(float maxFov) {
+    uintptr_t GetBestTarget(float maxFov) {
         uintptr_t localPlayer = Memory::Read<uintptr_t>((uintptr_t)Memory::clientDll + offsets::dwLocalPlayer);
-        if (!localPlayer) return -1;
+        if (!localPlayer) return 0;
 
         int localTeam = Memory::Read<int>(localPlayer + offsets::m_iTeamNum);
         Vector localEyePos = Memory::Read<Vector>(localPlayer + offsets::m_vecOrigin) +
             Memory::Read<Vector>(localPlayer + offsets::m_vecViewOffset);
 
         uintptr_t clientState = GetClientStatePtr();
-        if (!clientState) return -1;
+        if (!clientState) return 0;
 
         Vector viewAnglesVec = Memory::Read<Vector>(clientState + offsets::dwClientState_ViewAngles);
         QAngle viewAngles = VectorToQAngle(viewAnglesVec);
 
         float bestFov = maxFov;
-        int bestTarget = -1;
+        uintptr_t bestTarget = 0;
 
         for (int i = 1; i < 32; i++) {
             uintptr_t entity = Memory::Read<uintptr_t>((uintptr_t)Memory::clientDll + offsets::dwEntityList + i * 0x10);
-            if (!entity || !IsValidTarget((int)entity)) continue;
+            if (!entity) continue;
+            if (!IsValidTarget(entity)) continue;
 
             int entityTeam = Memory::Read<int>(entity + offsets::m_iTeamNum);
             if (team_check && entityTeam == localTeam) continue;
-            if (visibility_check && !IsVisible((int)entity)) continue;
+            if (visibility_check && !IsVisible(entity)) continue;
 
-            Vector entityBone = GetBonePosition((int)entity, aim_bone);
+            Vector entityBone = GetBonePosition(entity, aim_bone);
             QAngle angleToTarget = CalculateAngle(localEyePos, entityBone);
 
             float deltaX = angleToTarget.x - viewAngles.x;
             float deltaY = angleToTarget.y - viewAngles.y;
+
             float currentFov = std::sqrt(deltaX * deltaX + deltaY * deltaY);
 
             if (currentFov < bestFov) {
                 bestFov = currentFov;
-                bestTarget = (int)entity;
+                bestTarget = entity;
             }
         }
 
         return bestTarget;
     }
 
-    bool IsValidTarget(int entity) {
+    bool IsValidTarget(uintptr_t entity) {
         if (!entity) return false;
         int health = Memory::Read<int>(entity + offsets::m_iHealth);
         if (health <= 0 || health > 100) return false;
@@ -172,18 +185,28 @@ namespace Aimbot {
         return !dormant;
     }
 
-    bool IsVisible(int entity) {
+    bool IsVisible(uintptr_t entity) {
         if (!visibility_check) return true;
-        uintptr_t localPlayer = Memory::Read<uintptr_t>((uintptr_t)Memory::clientDll + offsets::dwLocalPlayer);
-        if (!localPlayer) return false;
-        int localIndex = Memory::Read<int>(localPlayer + 0x64);
+        if (!entity) return false;
+
+        uintptr_t clientState = GetClientStatePtr();
+        if (!clientState) return false;
+
+        int localIndex = Memory::Read<int>(clientState + offsets::dwClientState_GetLocalPlayer);
+        if (localIndex <= 0) return false;
+
         uint32_t spottedByMask = Memory::Read<uint32_t>(entity + offsets::m_bSpottedByMask);
+
         return (spottedByMask & (1 << (localIndex - 1))) != 0;
     }
 
-    Vector GetBonePosition(int entity, int boneIndex) {
+    Vector GetBonePosition(uintptr_t entity, int boneIndex) {
+        Vector bonePos = { 0.0f, 0.0f, 0.0f };
+        if (!entity) return bonePos;
+
         uintptr_t boneMatrix = Memory::Read<uintptr_t>(entity + offsets::m_dwBoneMatrix);
-        Vector bonePos;
+        if (!boneMatrix) return bonePos;
+
         bonePos.x = Memory::Read<float>(boneMatrix + 0x30 * boneIndex + 0x0C);
         bonePos.y = Memory::Read<float>(boneMatrix + 0x30 * boneIndex + 0x1C);
         bonePos.z = Memory::Read<float>(boneMatrix + 0x30 * boneIndex + 0x2C);

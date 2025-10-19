@@ -10,6 +10,8 @@
 
 namespace Menu {
 
+    
+
     struct Stats {
         int totalKills = 67;
         int totalDeaths = 67;
@@ -58,7 +60,7 @@ namespace Menu {
         }
 
         if (active) {
-            ImGui::PopStyleColor(3);
+          //  ImGui::PopStyleColor(3);
         }
     }
 
@@ -186,24 +188,29 @@ namespace Menu {
 
     void DrawVisualsSection() {
         ImGui::Text("Visuals Settings");
+
         static bool esp = true;
         static bool glow = Visuals::glowEnabled;
         static bool glowWalls = Visuals::glowThroughWalls;
+        static bool healthBar = Visuals::drawHealthBar;
 
-        // ESP checkbox (placeholder for future ESP feature)
         ImGui::Checkbox("ESP", &esp);
 
-        // Glow checkbox
         if (ImGui::Checkbox("Glow", &glow)) {
             Visuals::glowEnabled = glow;
         }
-        // Glow through walls checkbox
+
         if (ImGui::Checkbox("Glow Through Walls", &glowWalls)) {
             Visuals::glowThroughWalls = glowWalls;
         }
-        // Color picker for glow (RGBA)
+
         ImGui::ColorEdit4("Glow Color", Visuals::glowColor);
+
+        if (ImGui::Checkbox("Health Bar", &healthBar)) {
+            Visuals::drawHealthBar = healthBar;
+        }
     }
+
 
     void DrawMiscSection() {
         ImGui::Text("Misc Settings");

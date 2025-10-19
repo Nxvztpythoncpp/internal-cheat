@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "Hooks.h"
 #include "../../Cheats/Visuals/Visuals.h"
 #include "../MinHook/MinHook.h"
@@ -7,10 +9,12 @@
 #include "../kiero/kiero.h"
 #include "../../Gui/Menu/Menu.h"
 #include <Windows.h>
+#include <stdio.h>
 
 #ifdef _WIN64
 #define GWL_WNDPROC GWLP_WNDPROC
 #endif
+
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -20,6 +24,8 @@ static WNDPROC oWndProc = nullptr;
 static bool g_bInitialized = false;
 static bool d3d_init = false;
 SetCursorPosHook oSetCursorPos = nullptr;
+
+bool nigga = true;
 
 namespace Hooks {
     bool menu_open = false;
@@ -109,12 +115,26 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+
     Hooks::BlockGameInput(Hooks::menu_open);
     Menu::Draw();
 
     ImGui::EndFrame();
     ImGui::Render();
     ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
+
+    //delete on finals releases
+    if(nigga=true)
+    { 
+        AllocConsole();
+        freopen("conin$", "r", stdin);
+        freopen("conout$", "w", stdout);
+        freopen("conout$", "w", stderr);
+        //printf("Debugging Window:\n");
+
+        nigga = false;
+    }
 
     Visuals::Glow();
 
@@ -182,6 +202,8 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 void Initialize(HMODULE hModule) {
     if (MH_Initialize() == MH_OK) {
+        printf("ThreadProc: Initialize wdkhlçajukluhjndwqauhjikladswUIOLPÇDSWA\n");
+
         HMODULE hUser32 = LoadLibraryA("user32.dll");
         if (hUser32) {
             void* pSetCursorPos = GetProcAddress(hUser32, "SetCursorPos");

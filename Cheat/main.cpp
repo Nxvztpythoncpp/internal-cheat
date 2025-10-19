@@ -1,13 +1,20 @@
+
+
 #include <Windows.h>
 #include "Dependencies/Hooks/Hooks.h"
 #include "Dependencies/Kiero/kiero.h"
 #include <cstdlib>
+#include <stdio.h>
+
+
 
 BOOL APIENTRY DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved) {
     switch (dwReason) {
     case DLL_PROCESS_ATTACH:
         DisableThreadLibraryCalls(hMod);
         CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)Initialize, hMod, 0, nullptr);
+
+        //CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)Console, hMod, 0, nullptr);
         break;
     case DLL_PROCESS_DETACH:
         kiero::shutdown();

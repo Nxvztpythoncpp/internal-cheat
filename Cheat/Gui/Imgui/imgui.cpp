@@ -3471,7 +3471,7 @@ void ImGui::PopStyleColor(int count)
     ImGuiContext& g = *GImGui;
     if (g.ColorStack.Size < count)
     {
-        IM_ASSERT_USER_ERROR(0, "Calling PopStyleColor() too many times!");
+        //IM_ASSERT_USER_ERROR(0, "Calling PopStyleColor() too many times!");
         count = g.ColorStack.Size;
     }
     while (count > 0)

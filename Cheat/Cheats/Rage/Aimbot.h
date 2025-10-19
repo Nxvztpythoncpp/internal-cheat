@@ -2,6 +2,7 @@
 #include "../../Memory/Offsets.h"
 #include <Windows.h>
 #include <cmath>
+#include <cstdint>               // necessário para uintptr_t
 #include "../../Dependencies/Hooks/Hooks.h"
 
 namespace Aimbot {
@@ -17,13 +18,16 @@ namespace Aimbot {
 
     void Run();
     void OnCreateMove();
+
     QAngle CalculateAngle(const Vector& source, const Vector& destination);
     void ClampAngles(QAngle& angles);
     void SmoothAngle(const QAngle& current, QAngle& target, float smoothFactor);
-    int GetBestTarget(float maxFov);
-    bool IsValidTarget(int entity);
-    bool IsVisible(int entity);
-    Vector GetBonePosition(int entity, int boneIndex);
+
+    uintptr_t GetBestTarget(float maxFov);
+    bool IsValidTarget(uintptr_t entity);
+    bool IsVisible(uintptr_t entity);
+    Vector GetBonePosition(uintptr_t entity, int boneIndex);
+
     bool IsKeyPressed(int key);
-    void ApplyRecoilControl(int localPlayer, QAngle& angles);
+    void ApplyRecoilControl(uintptr_t localPlayer, QAngle& angles);
 }
