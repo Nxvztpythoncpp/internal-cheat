@@ -115,6 +115,8 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    Visuals::Glow();
+    Visuals::DrawHealthESP(); //delete on finals releases
 
     Hooks::BlockGameInput(Hooks::menu_open);
     Menu::Draw();
@@ -136,7 +138,7 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
         nigga = false;
     }
 
-    Visuals::Glow();
+ 
 
     return oEndScene(pDevice);
 }
