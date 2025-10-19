@@ -117,6 +117,7 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
 
     Visuals::Glow();
     Visuals::DrawHealthESP(); //delete on finals releases
+    Visuals::DrawBoxESP();
 
     Hooks::BlockGameInput(Hooks::menu_open);
     Menu::Draw();

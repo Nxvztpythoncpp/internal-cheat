@@ -1,28 +1,10 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(523,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
 C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(524,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  movement.cpp
-  Aimbot.cpp
-  Visuals.cpp
-C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Cheats\Rage\Aimbot.cpp(115,71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Cheats\Rage\Aimbot.cpp(116,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  HookSDK.cpp
-  Incluindo hook_sdk.h em HookSDK.cpp
   Hooks.cpp
-  kiero.cpp
-  imgui_impl_dx11.cpp
-  imgui_impl_dx9.cpp
-  imgui_impl_win32.cpp
-  imgui.cpp
-  imgui_draw.cpp
-  imgui_tables.cpp
-  imgui_widgets.cpp
   Menu.cpp
-  main.cpp
-C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\main.cpp(43,17): warning C4193: #pragma warning(pop): no matching '#pragma warning(push)'
-  Memory.cpp
   Generating code
-  1994 of 1999 functions (99.7%) were compiled, the rest were copied from previous compilation.
+  3 of 2000 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    47 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Cheat.vcxproj -> C:\Users\warzo\Documents\Build\CSGO.dll

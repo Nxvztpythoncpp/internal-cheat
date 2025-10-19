@@ -13,7 +13,11 @@ namespace Visuals {
     bool glowThroughWalls = false;
     float glowColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
     bool drawHealthBar = true;
-
+    // | BOX ESP NEW BY DANTEZ |
+    bool drawBoxes = true;
+    bool teamCheck = true;
+    float boxColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f }; // default box color 
+    // ------------------------------------------------------------------
     struct Vec3 { float x, y, z; };
     struct Matrix { float m[4][4]; };
 
@@ -68,6 +72,79 @@ namespace Visuals {
 
         }
         catch (...) { printf("[Glow] exception\n"); }
+    }
+
+    void DrawBoxESP() {
+        if (!drawBoxes) return;  
+        if (Memory::clientDll == 0 && !Memory::Initialize()) return;
+
+        try {
+            
+            auto localPlayer = Memory::Read<std::uintptr_t>(Memory::clientDll + offsets::dwLocalPlayer);
+            if (!localPlayer) return;
+            int localTeam = Memory::Read<int>(localPlayer + offsets::m_iTeamNum);
+            
+            Matrix viewMatrix = Memory::Read<Matrix>(Memory::clientDll + offsets::dwViewMatrix);
+            HWND hwnd = FindWindowA(NULL, "Counter-Strike: Global Offensive");
+            RECT rect;
+            if (hwnd) {
+                GetClientRect(hwnd, &rect);
+            }
+            else {
+                GetWindowRect(GetDesktopWindow(), &rect);
+            }
+            int screenWidth = rect.right - rect.left;
+            int screenHeight = rect.bottom - rect.top;
+
+            ImDrawList* drawList = ImGui::GetBackgroundDrawList();  
+           
+            for (int i = 1; i < 32; ++i) {
+                auto entity = Memory::Read<std::uintptr_t>(Memory::clientDll + offsets::dwEntityList + i * 0x10);
+                if (!entity) continue;
+                if (Memory::Read<bool>(entity + offsets::m_bDormant)) continue;
+                if (entity == localPlayer) continue; 
+                int team = Memory::Read<int>(entity + offsets::m_iTeamNum);
+                if (team == 0) continue;              
+                if (team == localTeam && teamCheck) continue;  
+
+                int health = Memory::Read<int>(entity + offsets::m_iHealth);
+                if (health <= 0 || health > 100) continue;    
+               
+                Vec3 origin = Memory::Read<Vec3>(entity + offsets::m_vecOrigin);
+                Vec3 head = origin;
+                head.z += 70.0f;  
+               
+                Vec3 screenFeet, screenHead;
+                if (!WorldToScreen(origin, screenFeet, viewMatrix, screenWidth, screenHeight)) continue;
+                if (!WorldToScreen(head, screenHead, viewMatrix, screenWidth, screenHeight)) continue;
+               
+                float top = screenHead.y;
+                float bottom = screenFeet.y;
+                if (top > bottom) std::swap(top, bottom);  // swap if needed so top is higher on screen:contentReference[oaicite:6]{index=6}
+
+                float height = bottom - top;
+                float width = height * 0.5f;              
+                float halfWidth = width / 2.0f;
+                float centerX = (screenHead.x + screenFeet.x) / 2.0f; 
+                float left = centerX - halfWidth;
+                float right = centerX + halfWidth;
+               
+                ImU32 col = ImGui::ColorConvertFloat4ToU32(ImVec4(
+                    boxColor[0], boxColor[1], boxColor[2], boxColor[3]));
+                ImU32 outlineCol = IM_COL32(0, 0, 0, 255);  // black outline color
+
+                // Draw box outline (black border) and main box
+                drawList->AddRect(ImVec2(left, top), ImVec2(right, bottom), outlineCol, 0.0f, 0, 2.0f);
+                drawList->AddRect(ImVec2(left, top), ImVec2(right, bottom), col, 0.0f, 0, 1.0f);
+
+                // Debug output (optional): 
+                printf("[BoxESP] Entity %d: left=%.1f, top=%.1f, right=%.1f, bottom=%.1f\n",
+                    i, left, top, right, bottom);
+            }
+        }
+        catch (...) {
+            printf("[BoxESP] exception\n");
+        }
     }
 
     void DrawHealthESP() {
