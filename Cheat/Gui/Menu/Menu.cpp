@@ -7,10 +7,10 @@
 #include "../../Cheats/Rage/Aimbot.h"
 #include "../Imgui/ImGuiHelpers.h"
 #include "../../Cheats/Visuals/Visuals.h"
+#include "../../Dependencies/Kiero/kiero.h"
+#include "../../Cheats/Misc/UninjectHook.h"
 
 namespace Menu {
-
-    
 
     struct Stats {
         int totalKills = 67;
@@ -220,6 +220,7 @@ namespace Menu {
         if (ImGui::Checkbox("Team Check", &teamChk)) {               
             Visuals::teamCheck = teamChk;                      
         }                                                      
+
     }
 
 
@@ -228,9 +229,20 @@ namespace Menu {
         static bool bhop = true;
         static bool bunnyhop = true;
         static bool radar = false;
+
         ImGui::Checkbox("Bunny Hop", &bhop);
         ImGui::Checkbox("Perfect Bunnyhop", &bunnyhop);
         ImGui::Checkbox("Radar Hack", &radar);
+
+        if (ImGui::Button("Uninject")) {
+            Unhook::RequestUnload();
+        }
+
+        if (Unhook::IsCleaning()) {
+            ImGui::Text("Cleaning in progress...");
+        }
+
+
     }
 
     void DrawConfigsSection() {

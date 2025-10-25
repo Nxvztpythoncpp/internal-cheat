@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cheats\Misc\movement.cpp" />
+    <ClCompile Include="Cheats\Misc\UninjectHook.cpp" />
     <ClCompile Include="Cheats\Rage\Aimbot.cpp" />
     <ClCompile Include="Cheats\Visuals\Visuals.cpp" />
     <ClCompile Include="Dependencies\CSGO\SDK\HookSDK.cpp" />
@@ -152,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cheats\Config\config_vars.h" />
+    <ClInclude Include="Cheats\Misc\UninjectHook.h" />
     <ClInclude Include="Cheats\Rage\Aimbot.h" />
     <ClInclude Include="Cheats\Visuals\Visuals.h" />
     <ClInclude Include="Dependencies\CSGO\SDK\HookSDK.h" />

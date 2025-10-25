@@ -1,12 +1,8 @@
-
-
 #include <Windows.h>
 #include "Dependencies/Hooks/Hooks.h"
 #include "Dependencies/Kiero/kiero.h"
 #include <cstdlib>
 #include <stdio.h>
-
-
 
 BOOL APIENTRY DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved) {
     switch (dwReason) {
