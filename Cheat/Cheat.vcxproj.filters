@@ -51,7 +51,7 @@
     <ClCompile Include="Dependencies\CSGO\SDK\HookSDK.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="Cheats\Misc\movement.cpp">
+    <ClCompile Include="Cheats\Misc\Movement.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
     <ClCompile Include="Cheats\Rage\Aimbot.cpp">
@@ -64,6 +64,9 @@
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
     <ClCompile Include="Cheats\Misc\UninjectHook.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="Gui\Fonts\Fonts.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,9 +110,6 @@
     <ClInclude Include="Memory\Offsets.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="Cheats\Config\config_vars.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
     <ClInclude Include="Cheats\Rage\Aimbot.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
@@ -125,8 +125,20 @@
     <ClInclude Include="Cheats\Misc\UninjectHook.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
+    <ClInclude Include="Gui\Fonts\IconsFontAwesome.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="Gui\Fonts\Fonts.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="Cheats\Misc\Movement.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\MinHook\MinHook.x86.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="..\..\..\..\Downloads\Font Awesome 7 Free-Solid-900.otf" />
   </ItemGroup>
 </Project>

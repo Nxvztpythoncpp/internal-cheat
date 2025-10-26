@@ -1,31 +1,30 @@
 #define _CRT_SECURE_NO_WARNINGS
-
 #include "Hooks.h"
 #include "../../Cheats/Visuals/Visuals.h"
-#include "../MinHook/MinHook.h"
+#include "../../Dependencies/MinHook/MinHook.h"
 #include "../../Gui/imgui/imgui.h"
 #include "../../Gui/imgui/backends/imgui_impl_dx9.h"
 #include "../../Gui/imgui/backends/imgui_impl_win32.h"
-#include "../kiero/kiero.h"
+#include "../../Cheats/Rage/Aimbot.h"
+#include "../../Cheats/Misc/Movement.h"
+#include "../../Cheats/Misc/UninjectHook.h"
 #include "../../Gui/Menu/Menu.h"
 #include <Windows.h>
+#include <d3d9.h>
 #include <stdio.h>
-
-#ifdef _WIN64
-#define GWL_WNDPROC GWLP_WNDPROC
-#endif
-
+#include <iostream>
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-static LPDIRECT3DDEVICE9 g_pDevice = nullptr;
-static HWND g_hWindow = nullptr;
-static WNDPROC oWndProc = nullptr;
-static bool g_bInitialized = false;
-static bool d3d_init = false;
+// ===== Globals =====
+LPDIRECT3DDEVICE9 g_pDevice = nullptr;
+HWND g_hWindow = nullptr;
+WNDPROC oWndProc = nullptr;
+bool g_bInitialized = false;
+bool d3d_init = false;
 SetCursorPosHook oSetCursorPos = nullptr;
-
-bool nigga = true;
+bool g_consoleAllocated = true;
+EndScene oEndScene = nullptr;
 
 namespace Hooks {
     bool menu_open = false;
@@ -34,15 +33,11 @@ namespace Hooks {
 
     void BlockGameInput(bool block) {
         input_blocked = block;
-
         ImGuiIO& io = ImGui::GetIO();
         if (block) {
             io.WantCaptureMouse = true;
             io.WantCaptureKeyboard = true;
             io.MouseDrawCursor = true;
-      
-            // This prevents CS:GO from reading mouse movements directly !!!!!!!!!!!!!!!!!!!
-
         }
         else {
             io.WantCaptureMouse = false;
@@ -54,13 +49,15 @@ namespace Hooks {
     bool IsInputBlocked() {
         return input_blocked;
     }
-}
 
-EndScene oEndScene = nullptr;
+    void SetWindowInfo(HWND hWnd, WNDPROC oWndProc) {
+        Unhook::SetWindowInfo(hWnd, oWndProc);
+    }
+}
 
 BOOL WINAPI hkSetCursorPos(int X, int Y) {
     if (Hooks::menu_open || Hooks::input_blocked) {
-        return TRUE; 
+        return TRUE;
     }
     return oSetCursorPos(X, Y);
 }
@@ -91,12 +88,16 @@ HWND GetProcessWindow() {
 }
 
 long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
+    if (Unhook::IsCleaning()) {
+        return oEndScene(pDevice);
+    }
     if (!g_bInitialized) {
         g_pDevice = pDevice;
         g_hWindow = GetProcessWindow();
         if (g_hWindow) {
             InitImGui(pDevice);
             oWndProc = (WNDPROC)SetWindowLongPtr(g_hWindow, GWL_WNDPROC, (LONG_PTR)WndProc);
+            Hooks::SetWindowInfo(g_hWindow, oWndProc);
             g_bInitialized = true;
             SetupSDKHooks();
         }
@@ -118,7 +119,8 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
     Visuals::Glow();
     Visuals::DrawHealthESP();
     Visuals::DrawBoxESP();
-
+    Movement::BunnyHop();
+    Aimbot::Run();
     Hooks::BlockGameInput(Hooks::menu_open);
     Menu::Draw();
 
@@ -126,20 +128,14 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
     ImGui::Render();
     ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-
-    //delete on finals releases
-    if(nigga=true)
-    { 
+    if (g_consoleAllocated) {
         AllocConsole();
         freopen("conin$", "r", stdin);
         freopen("conout$", "w", stdout);
         freopen("conout$", "w", stderr);
-        //printf("Debugging Window:\n");
-
-        nigga = false;
+        g_consoleAllocated = false;
+        std::cerr << "Console allocated successfully" << std::endl;
     }
-
- 
 
     return oEndScene(pDevice);
 }
@@ -148,7 +144,6 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     static bool insert_down_last = false;
 
     if (g_bInitialized) {
-		// Always let ImGui handle input first remember henrique
         if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
             return TRUE;
         }
@@ -160,10 +155,8 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         }
         insert_down_last = insert_down_now;
 
-        // Block ALL input to the game when menu is open
         if (Hooks::menu_open || Hooks::input_blocked) {
             switch (uMsg) {
-                // Mouse events
             case WM_MOUSEMOVE:
             case WM_LBUTTONDOWN:
             case WM_LBUTTONUP:
@@ -179,8 +172,6 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             case WM_XBUTTONDOWN:
             case WM_XBUTTONUP:
             case WM_XBUTTONDBLCLK:
-
-                // Keyboard events (prevent shooting/movement)
             case WM_KEYDOWN:
             case WM_KEYUP:
             case WM_SYSKEYDOWN:
@@ -189,13 +180,8 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             case WM_DEADCHAR:
             case WM_SYSCHAR:
             case WM_SYSDEADCHAR:
-
-                // RAW INPUT - MUSTHAVE BITCH FOR CS:GO
             case WM_INPUT:
-                if (Hooks::menu_open || Hooks::input_blocked) {
-                    return TRUE;
-                }
-                break; 
+                return TRUE;
             }
         }
     }
@@ -203,20 +189,60 @@ LRESULT __stdcall WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-void Initialize(HMODULE hModule) {
-    if (MH_Initialize() == MH_OK) {
-        printf("ThreadProc: Initialize wdkhlçajukluhjndwqauhjikladswUIOLPÇDSWA\n");
+bool HookEndScene() {
+    LPDIRECT3D9 pD3D = Direct3DCreate9(D3D_SDK_VERSION);
+    if (!pD3D)
+        return false;
 
-        HMODULE hUser32 = LoadLibraryA("user32.dll");
-        if (hUser32) {
-            void* pSetCursorPos = GetProcAddress(hUser32, "SetCursorPos");
-            if (pSetCursorPos && MH_CreateHook(pSetCursorPos, &hkSetCursorPos, reinterpret_cast<LPVOID*>(&oSetCursorPos)) == MH_OK) {
-                MH_EnableHook(pSetCursorPos);
-            }
+    D3DPRESENT_PARAMETERS pp = { 0 };
+    pp.Windowed = TRUE;
+    pp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    pp.hDeviceWindow = GetProcessWindow();
+    pp.BackBufferFormat = D3DFMT_A8R8G8B8;
+
+    LPDIRECT3DDEVICE9 pDummyDevice = nullptr;
+    HRESULT hr = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, pp.hDeviceWindow,
+        D3DCREATE_SOFTWARE_VERTEXPROCESSING, &pp, &pDummyDevice);
+    if (FAILED(hr) || !pDummyDevice) {
+        pD3D->Release();
+        return false;
+    }
+
+    void** vTable = *(void***)pDummyDevice;
+    void* endSceneAddr = vTable[42];
+
+    pDummyDevice->Release();
+    pD3D->Release();
+
+    if (MH_CreateHook(endSceneAddr, &hkEndScene, reinterpret_cast<LPVOID*>(&oEndScene)) != MH_OK)
+        return false;
+
+    if (MH_EnableHook(endSceneAddr) != MH_OK)
+        return false;
+
+    return true;
+}
+
+void Initialize(HMODULE hModule) {
+    freopen("debug.log", "w", stderr);
+
+    if (MH_Initialize() != MH_OK) {
+        std::cerr << "MinHook initialization failed" << std::endl;
+        return;
+    }
+
+    HMODULE hUser32 = LoadLibraryA("user32.dll");
+    if (hUser32) {
+        void* pSetCursorPos = GetProcAddress(hUser32, "SetCursorPos");
+        if (pSetCursorPos && MH_CreateHook(pSetCursorPos, &hkSetCursorPos, reinterpret_cast<LPVOID*>(&oSetCursorPos)) == MH_OK) {
+            MH_EnableHook(pSetCursorPos);
         }
     }
 
-    if (kiero::init(kiero::RenderType::D3D9) == kiero::Status::Success) {
-        kiero::bind(42, (void**)&oEndScene, hkEndScene);
+    if (!HookEndScene()) {
+        std::cerr << "Failed to hook EndScene" << std::endl;
+        return;
     }
+
+    std::cerr << "Hooks initialized successfully" << std::endl;
 }

@@ -9,13 +9,16 @@
 
 namespace Visuals {
 
-    bool glowEnabled = true;
+    bool espEnabled = false;
+    bool glowEnabled = false;
     bool glowThroughWalls = false;
-    float glowColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
-    bool drawHealthBar = true;
+    float glowColorTeam[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
+    float glowColorEnemy[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+    bool drawHealthBar = false;
     // | BOX ESP NEW BY DANTEZ |
-    bool drawBoxes = true;
-    bool teamCheck = true;
+    bool drawBoxes = false;
+    bool teamCheck = false;
+    bool boxOutline = false;
     float boxColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f }; // default box color 
     // ------------------------------------------------------------------
     struct Vec3 { float x, y, z; };
@@ -46,7 +49,7 @@ namespace Visuals {
             if (!glowManager || !localPlayer) return;
 
             int localTeam = Memory::Read<int>(localPlayer + offsets::m_iTeamNum);
-            printf("[Glow] localTeam: %d\n", localTeam);
+            //printf("[Glow] localTeam: %d\n", localTeam);
 
             for (int i = 1; i < 32; i++) {  // Start from 1 to skip world
                 auto entity = Memory::Read<std::uintptr_t>(Memory::clientDll + offsets::dwEntityList + i * 0x10);
@@ -56,18 +59,47 @@ namespace Visuals {
                 }
 
                 int team = Memory::Read<int>(entity + offsets::m_iTeamNum);
-                if (team == localTeam || team == 0) continue;
+                if (!teamCheck) {
+                    if (team == localTeam) {
+                        int glowIndex = Memory::Read<int>(entity + offsets::m_iGlowIndex);
+                        if (glowIndex < 0) continue;
 
-                int glowIndex = Memory::Read<int>(entity + offsets::m_iGlowIndex);
-                if (glowIndex < 0) continue;
+                        auto glowObject = glowManager + glowIndex * 0x38;
+                        Memory::Write<float>(glowObject + 0x8, glowColorTeam[0]);
+                        Memory::Write<float>(glowObject + 0xC, glowColorTeam[1]);
+                        Memory::Write<float>(glowObject + 0x10, glowColorTeam[2]);
+                        Memory::Write<float>(glowObject + 0x14, glowColorTeam[3]);
+                        Memory::Write<bool>(glowObject + 0x28, glowThroughWalls);
+                    }
+                    else {
+                        if (team != localTeam) {
+                            int glowIndex = Memory::Read<int>(entity + offsets::m_iGlowIndex);
+                            if (glowIndex < 0) continue;
 
-                auto glowObject = glowManager + glowIndex * 0x38;
-                Memory::Write<float>(glowObject + 0x8, glowColor[0]);
-                Memory::Write<float>(glowObject + 0xC, glowColor[1]);
-                Memory::Write<float>(glowObject + 0x10, glowColor[2]);
-                Memory::Write<float>(glowObject + 0x14, glowColor[3]);
-                Memory::Write<bool>(glowObject + 0x28, glowThroughWalls);
-                Memory::Write<bool>(glowObject + 0x29, true);
+                            auto glowObject = glowManager + glowIndex * 0x38;
+                            Memory::Write<float>(glowObject + 0x8, glowColorEnemy[0]);
+                            Memory::Write<float>(glowObject + 0xC, glowColorEnemy[1]);
+                            Memory::Write<float>(glowObject + 0x10, glowColorEnemy[2]);
+                            Memory::Write<float>(glowObject + 0x14, glowColorEnemy[3]);
+                            Memory::Write<bool>(glowObject + 0x28, glowThroughWalls);
+                        }
+                    }
+
+                }
+                else {
+                    if (team == localTeam || team == 0) continue;
+
+                    int glowIndex = Memory::Read<int>(entity + offsets::m_iGlowIndex);
+                    if (glowIndex < 0) continue;
+
+                    auto glowObject = glowManager + glowIndex * 0x38;
+                    Memory::Write<float>(glowObject + 0x8, glowColorEnemy[0]);
+                    Memory::Write<float>(glowObject + 0xC, glowColorEnemy[1]);
+                    Memory::Write<float>(glowObject + 0x10, glowColorEnemy[2]);
+                    Memory::Write<float>(glowObject + 0x14, glowColorEnemy[3]);
+                    Memory::Write<bool>(glowObject + 0x28, glowThroughWalls);
+                    //Memory::Write<bool>(glowObject + 0x29, !glowThroughWalls);
+                }
             }
 
         }
@@ -133,11 +165,11 @@ namespace Visuals {
                     boxColor[0], boxColor[1], boxColor[2], boxColor[3]));
                 ImU32 outlineCol = IM_COL32(0, 0, 0, 255);  // black outline color
 
-                drawList->AddRect(ImVec2(left, top), ImVec2(right, bottom), outlineCol, 0.0f, 0, 2.0f);
+                if (boxOutline) { drawList->AddRect(ImVec2(left, top), ImVec2(right, bottom), outlineCol, 0.0f, 0, 2.0f); };
                 drawList->AddRect(ImVec2(left, top), ImVec2(right, bottom), col, 0.0f, 0, 1.0f);
 
-                printf("[BoxESP] Entity %d: left=%.1f, top=%.1f, right=%.1f, bottom=%.1f\n",
-                    i, left, top, right, bottom);
+                /*printf("[BoxESP] Entity %d: left=%.1f, top=%.1f, right=%.1f, bottom=%.1f\n",
+                    i, left, top, right, bottom);*/
             }
         }
         catch (...) {

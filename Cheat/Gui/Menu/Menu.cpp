@@ -1,14 +1,23 @@
 #include "Menu.h"
 #include "StyleColors.h"
-#include <Windows.h>
+
 #include "../Imgui/imgui.h"
-#include "../../Dependencies/Hooks/Hooks.h"
-#include <string>
-#include "../../Cheats/Rage/Aimbot.h"
 #include "../Imgui/ImGuiHelpers.h"
+#include "../Fonts/IconsFontAwesome.h"
+#include "../Fonts/Fonts.h"
+
+#include "../../Cheats/Rage/Aimbot.h"
 #include "../../Cheats/Visuals/Visuals.h"
+
 #include "../../Dependencies/Kiero/kiero.h"
+#include "../../Dependencies/Hooks/Hooks.h"
 #include "../../Cheats/Misc/UninjectHook.h"
+#include"../../Cheats/Misc/Movement.h"
+
+#include <filesystem>
+#include <string>
+#include <cstdio>
+#include <Windows.h>
 
 namespace Menu {
 
@@ -35,6 +44,7 @@ namespace Menu {
         Stats,
         Ragebot,
         AntiAim,
+        Skins,
         Visuals,
         Misc,
         Configs,
@@ -128,6 +138,12 @@ namespace Menu {
         }
     }
 
+    void DrawSkinsSection() {
+
+         ImGui::Text("Skinchanger NIGGER");
+
+    }
+
 
     void DrawRagebotSection() {
         ImGui::Text("Ragebot Settings");
@@ -146,7 +162,7 @@ namespace Menu {
             Aimbot::enabled = aimbot;
         }
 
-        ImGui::SliderFloat("FOV", &fov, 1.0f, 10.0f, "%.1f");
+        ImGui::SliderFloat("FOV", &fov, 1.0f, 180.0f, "%.1f");
         Aimbot::fov = fov;
 
         if (ImGui::Checkbox("Silent Aim", &silent)) {
@@ -165,8 +181,22 @@ namespace Menu {
             Aimbot::team_check = team_check;
         }
 
-        ImGui::SliderInt("Aim Key", &aim_key, 0, 255);
-        Aimbot::aim_key = aim_key;
+        const char* aimKeys[] = { "Always", "Left Mouse (LMB)", "Right Mouse (RMB)", "Middle Mouse (MMB)", "Mouse X1", "Mouse X2" };
+
+        int aimKeyIndex = 0;
+        switch (Aimbot::aim_key) {
+        case 1: aimKeyIndex = 1; break; // LMB
+        case 2: aimKeyIndex = 2; break; // RMB
+        case 4: aimKeyIndex = 3; break; // MMB
+        case 5: aimKeyIndex = 4; break; // X1
+        case 6: aimKeyIndex = 5; break; // X2
+        default: aimKeyIndex = 0; break; // Always
+        }
+
+        ImGui::Combo("Aim Key", &aimKeyIndex, aimKeys, IM_ARRAYSIZE(aimKeys));
+
+        int aimKeyValues[] = { 0, 1, 2, 4, 5, 6 };
+        Aimbot::aim_key = aimKeyValues[aimKeyIndex];
 
         ImGui::SliderInt("Aim Bone", &aim_bone, 0, 128);
         Aimbot::aim_bone = aim_bone;
@@ -189,12 +219,13 @@ namespace Menu {
     void DrawVisualsSection() {
         ImGui::Text("Visuals Settings");
 
-        static bool esp = true;
+        static bool esp = Visuals::espEnabled;
         static bool glow = Visuals::glowEnabled;
         static bool glowWalls = Visuals::glowThroughWalls;
         static bool healthBar = Visuals::drawHealthBar;
         static bool boxes = Visuals::drawBoxes;         
         static bool teamChk = Visuals::teamCheck;       
+        static bool& boxOut = Visuals::boxOutline;
 
         ImGui::Checkbox("ESP", &esp);
 
@@ -206,7 +237,8 @@ namespace Menu {
             Visuals::glowThroughWalls = glowWalls;
         }
 
-        ImGui::ColorEdit4("Glow Color", Visuals::glowColor);
+        ImGui::ColorEdit4("Glow Enemy Color", Visuals::glowColorEnemy);
+        ImGui::ColorEdit4("Glow Team Color", Visuals::glowColorTeam);
 
         if (ImGui::Checkbox("Health Bar", &healthBar)) {
             Visuals::drawHealthBar = healthBar;
@@ -215,6 +247,8 @@ namespace Menu {
         if (ImGui::Checkbox("Box ESP", &boxes)) {           
            Visuals::drawBoxes = boxes;                
         }
+
+        ImGui::Checkbox("Box Outline", &boxOut);
 
         ImGui::ColorEdit4("Box Color", Visuals::boxColor);     
         if (ImGui::Checkbox("Team Check", &teamChk)) {               
@@ -226,17 +260,19 @@ namespace Menu {
 
     void DrawMiscSection() {
         ImGui::Text("Misc Settings");
-        static bool bhop = true;
-        static bool bunnyhop = true;
+        static bool& bhop = Movement::BunnyhopEnabled;
+        static bool bunnyhop = false;
         static bool radar = false;
 
         ImGui::Checkbox("Bunny Hop", &bhop);
         ImGui::Checkbox("Perfect Bunnyhop", &bunnyhop);
         ImGui::Checkbox("Radar Hack", &radar);
 
-        if (ImGui::Button("Uninject")) {
+        if (ImGui::Button("Uninject") && !Unhook::IsCleaning()) {
             Unhook::RequestUnload();
+            Unhook::StartSafeCleanupThread();
         }
+
 
         if (Unhook::IsCleaning()) {
             ImGui::Text("Cleaning in progress...");
@@ -246,13 +282,33 @@ namespace Menu {
     }
 
     void DrawConfigsSection() {
-        ImGui::Text("Configs");
-        if (ImGui::Button("Legit", ImVec2(80, 30))) {}
-        ImGui::SameLine();
-        if (ImGui::Button("Rage", ImVec2(80, 30))) {}
-        ImGui::SameLine();
-        if (ImGui::Button("HvH", ImVec2(80, 30))) {}
+        ImVec2 childSize = ImVec2(620, 70);
+
+        ImGui::BeginChild("ConfigChild", childSize, true, ImGuiWindowFlags_NoScrollbar);
+
+        ImVec2 titlePos = ImGui::GetCursorPos();
+        ImGui::Text("Config name");
+        ImVec2 titleEnd = ImGui::GetCursorPos();
+
+        ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
+        ImVec2 descPos = ImGui::GetCursorPos();
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "User and KD");
+        ImGui::PopFont();
+        ImVec2 descEnd = ImGui::GetCursorPos();
+
+        ImVec2 buttonSize = ImVec2(100, 30);
+
+        float buttonY = titlePos.y + (descEnd.y - titlePos.y - buttonSize.y) / 2.0f;
+        ImGui::SetCursorPosX(childSize.x - buttonSize.x - 10);
+        ImGui::SetCursorPosY(buttonY);
+
+        if (ImGui::Button("Load " ICON_FA_SERINGE, buttonSize)) {
+            printf("Loaded Config\n");
+        }
+
+        ImGui::EndChild();
     }
+
 
     void DrawLuasSection() {
         ImGui::Text("Luas");
@@ -269,7 +325,15 @@ namespace Menu {
     }
 
     void Draw() {
+
+        static bool fonts_initialized = false;
+
         if (!Hooks::menu_open) return;
+
+        InitFonts();
+
+        ImGui::PushFont(GetIconFont());
+
 
         StyleColors::Apply();
         ImGui::SetNextWindowSize(ImVec2(850, 500), ImGuiCond_FirstUseEver);
@@ -291,18 +355,21 @@ namespace Menu {
             ImU32 colB = IM_COL32(220, 90, 200, 220); 
 
             float rounding = ImGui::GetStyle().WindowRounding; 
-            dl->AddRectFilled(headerMin, headerMax, colA, rounding, ImDrawFlags_RoundCornersTop);
-            dl->AddRectFilledMultiColor(headerMin, headerMax, colA, colB, colB, colA); 
+
+            //gradient
+            //dl->AddRectFilled(headerMin, headerMax, colA, rounding, ImDrawFlags_RoundCornersTop);
+            //dl->AddRectFilledMultiColor(headerMin, headerMax, colA, colB, colB, colA); 
 
             dl->AddLine(ImVec2(headerMin.x + 8, headerMax.y - 1), ImVec2(headerMax.x - 8, headerMax.y - 1), IM_COL32(255, 255, 255, 18), 1.0f);
 
             ImGui::SetCursorScreenPos(ImVec2(headerMin.x + 20, headerMin.y + 16));
-            ImGui::TextColored(ImVec4(0.96f, 0.96f, 0.98f, 1.0f), "CS:GO Menu");
+            ImGui::TextColored(ImVec4(0.96f, 0.96f, 0.98f, 1.0f), "Cyclone.cc");
 
             ImVec2 avatarPos(headerMax.x - 64, headerMin.y + 8);
             float avatarSize = 40.0f;
             dl->AddRectFilled(ImVec2(avatarPos.x, avatarPos.y), ImVec2(avatarPos.x + avatarSize, avatarPos.y + avatarSize), IM_COL32(22, 22, 30, 255), 8.0f);
-            dl->AddText(ImVec2(avatarPos.x + 12, avatarPos.y + 10), IM_COL32(240, 240, 255, 255), "A");
+            dl->AddText(ImVec2(avatarPos.x + 12, avatarPos.y + 10), IM_COL32(240, 240, 255, 255), ICON_FA_GEAR);
+
         }
 
         ImGui::Spacing();
@@ -318,13 +385,14 @@ namespace Menu {
 
         if (SidebarIconButton(ICON_FA_CROSSHAIRS, "Ragebot", currentSection == SidebarSection::Ragebot, ImVec2(130, 36))) currentSection = SidebarSection::Ragebot;
         if (SidebarIconButton(ICON_FA_SHIELD_HALVED, "Anti Aim", currentSection == SidebarSection::AntiAim, ImVec2(130, 36))) currentSection = SidebarSection::AntiAim;
+        if (SidebarIconButton(ICON_FA_PEN_FANCY, "Skins", currentSection == SidebarSection::Skins, ImVec2(130, 36))) currentSection = SidebarSection::Skins;
         if (SidebarIconButton(ICON_FA_EYE, "Visuals", currentSection == SidebarSection::Visuals, ImVec2(130, 36))) currentSection = SidebarSection::Visuals;
         if (SidebarIconButton(ICON_FA_WAND_MAGIC, "Misc", currentSection == SidebarSection::Misc, ImVec2(130, 36))) currentSection = SidebarSection::Misc;
 
         ImGui::Separator();
 
-        if (SidebarIconButton(ICON_FA_GEAR, "Configs", currentSection == SidebarSection::Configs, ImVec2(130, 36))) currentSection = SidebarSection::Configs;
-        if (SidebarIconButton(ICON_FA_CODE, "Luas", currentSection == SidebarSection::Luas, ImVec2(130, 36))) currentSection = SidebarSection::Luas;
+        if (SidebarIconButton(ICON_FA_CLOUD, "Configs", currentSection == SidebarSection::Configs, ImVec2(130, 36))) currentSection = SidebarSection::Configs;
+        if (SidebarIconButton(ICON_FA_MOON, "Luas", currentSection == SidebarSection::Luas, ImVec2(130, 36))) currentSection = SidebarSection::Luas;
 
         ImGui::EndChild();
 
@@ -350,5 +418,7 @@ namespace Menu {
 
         ImGui::End();
         StyleColors::Restore();
+
+        ImGui::PopFont();
     }
 }

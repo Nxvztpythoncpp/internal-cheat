@@ -91,18 +91,34 @@ typedef long(__stdcall* EndScene)(LPDIRECT3DDEVICE9 pDevice);
 typedef BOOL(WINAPI* SetCursorPosHook)(int X, int Y);
 
 LRESULT __stdcall WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 void Initialize(HMODULE hModule);
+HWND GetProcessWindow();
 
+extern LPDIRECT3DDEVICE9 g_pDevice;
+extern HWND g_hWindow;
+extern WNDPROC oWndProc;
+extern bool g_bInitialized;
+extern bool d3d_init;
+extern bool g_consoleAllocated;
 extern SetCursorPosHook oSetCursorPos;
+extern EndScene oEndScene;
 
 namespace Hooks {
     extern bool menu_open;
     extern bool input_shouldListen;
+    extern bool input_blocked;
 
-    //mouse fix (dantez)
+    inline bool* GetMenuFlagPointer() noexcept {
+        return &menu_open;
+    }
+
+    inline bool* GetInputBlockedFlagPointer() noexcept {
+        return &input_blocked;
+    }
+
     void BlockGameInput(bool block);
     bool IsInputBlocked();
+    void SetWindowInfo(HWND hWnd, WNDPROC oWndProc);
 }
 
 void SetupSDKHooks();

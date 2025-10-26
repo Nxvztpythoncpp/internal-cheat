@@ -27,7 +27,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -81,10 +81,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);d3d9.lib;$(MSBuildProjectDirectory)\Dependencies\MinHook\MinHook.x86.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,6 +104,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);d3d9.lib;$(MSBuildProjectDirectory)\Dependencies\MinHook\MinHook.x86.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -133,13 +136,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Cheats\Misc\movement.cpp" />
+    <ClCompile Include="Cheats\Misc\Movement.cpp" />
     <ClCompile Include="Cheats\Misc\UninjectHook.cpp" />
     <ClCompile Include="Cheats\Rage\Aimbot.cpp" />
     <ClCompile Include="Cheats\Visuals\Visuals.cpp" />
     <ClCompile Include="Dependencies\CSGO\SDK\HookSDK.cpp" />
     <ClCompile Include="Dependencies\Hooks\Hooks.cpp" />
     <ClCompile Include="Dependencies\Kiero\kiero.cpp" />
+    <ClCompile Include="Gui\Fonts\Fonts.cpp" />
     <ClCompile Include="Gui\Imgui\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="Gui\Imgui\backends\imgui_impl_dx9.cpp" />
     <ClCompile Include="Gui\Imgui\backends\imgui_impl_win32.cpp" />
@@ -152,7 +156,7 @@
     <ClCompile Include="Memory\Memory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cheats\Config\config_vars.h" />
+    <ClInclude Include="Cheats\Misc\Movement.h" />
     <ClInclude Include="Cheats\Misc\UninjectHook.h" />
     <ClInclude Include="Cheats\Rage\Aimbot.h" />
     <ClInclude Include="Cheats\Visuals\Visuals.h" />
@@ -160,6 +164,7 @@
     <ClInclude Include="Dependencies\Hooks\Hooks.h" />
     <ClInclude Include="Dependencies\Kiero\kiero.h" />
     <ClInclude Include="Dependencies\MinHook\MinHook.h" />
+    <ClInclude Include="Gui\Fonts\Fonts.h" />
     <ClInclude Include="Gui\Imgui\backends\imgui_impl_dx9.h" />
     <ClInclude Include="Gui\Imgui\imconfig.h" />
     <ClInclude Include="Gui\Imgui\backends\imgui_impl_dx11.h" />
@@ -167,6 +172,7 @@
     <ClInclude Include="Gui\Imgui\imgui.h" />
     <ClInclude Include="Gui\Imgui\ImGuiHelpers.h" />
     <ClInclude Include="Gui\Imgui\imgui_internal.h" />
+    <ClInclude Include="Gui\Fonts\IconsFontAwesome.h" />
     <ClInclude Include="Gui\Menu\Menu.h" />
     <ClInclude Include="Gui\Menu\StyleColors.h" />
     <ClInclude Include="Memory\Memory.h" />
@@ -174,6 +180,9 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\MinHook\MinHook.x86.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="..\..\..\..\Downloads\Font Awesome 7 Free-Solid-900.otf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
