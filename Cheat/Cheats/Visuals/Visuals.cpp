@@ -20,6 +20,8 @@ namespace Visuals {
     bool teamCheck = false;
     bool boxOutline = false;
     float boxColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f }; // default box color 
+    bool drawSkeleton = false;
+	float skeletonColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f }; // default skeleton color like in box esp (red is my fav)
     // ------------------------------------------------------------------
     struct Vec3 { float x, y, z; };
     struct Matrix { float m[4][4]; };
@@ -104,6 +106,144 @@ namespace Visuals {
 
         }
         catch (...) { printf("[Glow] exception\n"); }
+    }
+
+    void DrawSkeletonESP() {
+        if (!drawSkeleton) return;
+        if (Memory::clientDll == 0 && !Memory::Initialize()) return;
+
+        try {
+            auto localPlayer = Memory::Read<std::uintptr_t>(Memory::clientDll + offsets::dwLocalPlayer);
+            if (!localPlayer) return;
+            int localTeam = Memory::Read<int>(localPlayer + offsets::m_iTeamNum);
+
+            // Read view matrix and get screen dimensions
+            Matrix viewMatrix = Memory::Read<Matrix>(Memory::clientDll + offsets::dwViewMatrix);
+            HWND hwnd = FindWindowA(NULL, "Counter-Strike: Global Offensive");
+            RECT rect;
+            if (hwnd) GetClientRect(hwnd, &rect);
+            else GetWindowRect(GetDesktopWindow(), &rect);
+            int screenWidth = rect.right - rect.left;
+            int screenHeight = rect.bottom - rect.top;
+
+            ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+            // Loop through entity list
+            for (int i = 1; i < 32; ++i) {
+                auto entity = Memory::Read<std::uintptr_t>(Memory::clientDll + offsets::dwEntityList + i * 0x10);
+                if (!entity) continue;
+                if (Memory::Read<bool>(entity + offsets::m_bDormant)) continue;
+                if (entity == localPlayer) continue;
+                int team = Memory::Read<int>(entity + offsets::m_iTeamNum);
+                if (team == 0) continue;
+                if (team == localTeam && teamCheck) continue;  // respect team check
+                int health = Memory::Read<int>(entity + offsets::m_iHealth);
+                if (health <= 0 || health > 100) continue;
+
+                // Read key bones (using the bone matrix)
+                uintptr_t boneMatrix = Memory::Read<uintptr_t>(entity + offsets::m_dwBoneMatrix);
+                if (!boneMatrix) continue;
+                Vec3 pelvis, spine, chest, neck, head;
+                Vec3 leftShoulder, leftElbow, leftHand;
+                Vec3 rightShoulder, rightElbow, rightHand;
+                Vec3 leftHip, leftKnee, leftFoot;
+                Vec3 rightHip, rightKnee, rightFoot;
+
+                // Helper macro to read each bone's (x,y,z)
+                #define READ_BONE(vec, index) \
+                    vec.x = Memory::Read<float>(boneMatrix + 0x30 * (index) + 0x0C); \
+                    vec.y = Memory::Read<float>(boneMatrix + 0x30 * (index) + 0x1C); \
+                    vec.z = Memory::Read<float>(boneMatrix + 0x30 * (index) + 0x2C);
+
+                READ_BONE(pelvis, 0);
+                READ_BONE(spine, 2);
+                READ_BONE(chest, 3);
+                READ_BONE(neck, 4);
+                READ_BONE(head, 5);
+
+                READ_BONE(leftShoulder, 6);
+                READ_BONE(leftElbow, 7);
+                READ_BONE(leftHand, 8);
+
+                READ_BONE(rightShoulder, 9);
+                READ_BONE(rightElbow, 10);
+                READ_BONE(rightHand, 11);
+
+                READ_BONE(leftHip, 12);
+                READ_BONE(leftKnee, 13);
+                READ_BONE(leftFoot, 14);
+
+                READ_BONE(rightHip, 15);
+                READ_BONE(rightKnee, 16);
+                READ_BONE(rightFoot, 17);
+                #undef READ_BONE
+
+                // Project bones to screen
+                Vec3 s0, s2, s3, s4, s5, s6;
+                Vec3 s8, s9, s10, s13, s14, s15;
+                Vec3 s17, s18, s19, s20, s22, s23, s24, s25;
+                if (!WorldToScreen(pelvis, s0, viewMatrix, screenWidth, screenHeight) ||
+                    !WorldToScreen(spine, s2, viewMatrix, screenWidth, screenHeight) ||
+                    !WorldToScreen(chest, s3, viewMatrix, screenWidth, screenHeight) ||
+                    !WorldToScreen(neck, s4, viewMatrix, screenWidth, screenHeight) ||
+                    !WorldToScreen(head, s5, viewMatrix, screenWidth, screenHeight) ||
+                    !WorldToScreen(leftShoulder, s6, viewMatrix, screenWidth, screenHeight))
+                    continue; // need at least torso/head visible
+
+                // Compute color
+                ImU32 col = ImGui::ColorConvertFloat4ToU32(ImVec4(
+                    skeletonColor[0], skeletonColor[1], skeletonColor[2], skeletonColor[3]));
+
+                // Draw spine (pelvis->stomach->chest->neck->head)
+                drawList->AddLine(ImVec2(s0.x, s0.y), ImVec2(s2.x, s2.y), col);
+                drawList->AddLine(ImVec2(s2.x, s2.y), ImVec2(s3.x, s3.y), col);
+                drawList->AddLine(ImVec2(s3.x, s3.y), ImVec2(s4.x, s4.y), col);
+                drawList->AddLine(ImVec2(s4.x, s4.y), ImVec2(s5.x, s5.y), col);
+                drawList->AddLine(ImVec2(s5.x, s5.y), ImVec2(s6.x, s6.y), col);
+
+                // Draw left arm (neck->shoulder->elbow->hand)
+                if (WorldToScreen(leftHand, s8, viewMatrix, screenWidth, screenHeight) &&
+                    WorldToScreen(rightShoulder, s9, viewMatrix, screenWidth, screenHeight) &&
+                    WorldToScreen(rightElbow, s10, viewMatrix, screenWidth, screenHeight))
+                {
+                    drawList->AddLine(ImVec2(s5.x, s5.y), ImVec2(s8.x, s8.y), col);
+                    drawList->AddLine(ImVec2(s8.x, s8.y), ImVec2(s9.x, s9.y), col);
+                    drawList->AddLine(ImVec2(s9.x, s9.y), ImVec2(s10.x, s10.y), col);
+                }
+
+                // Draw right arm (neck->shoulder->elbow->hand)
+                if (WorldToScreen(rightShoulder, s13, viewMatrix, screenWidth, screenHeight) &&
+                    WorldToScreen(rightElbow, s14, viewMatrix, screenWidth, screenHeight) &&
+                    WorldToScreen(rightHand, s15, viewMatrix, screenWidth, screenHeight))
+                {
+                    drawList->AddLine(ImVec2(s5.x, s5.y), ImVec2(s13.x, s13.y), col);
+                    drawList->AddLine(ImVec2(s13.x, s13.y), ImVec2(s14.x, s14.y), col);
+                    drawList->AddLine(ImVec2(s14.x, s14.y), ImVec2(s15.x, s15.y), col);
+                }
+
+                // Draw left leg (pelvis->thigh->knee->foot)
+                if (WorldToScreen(leftHip, s22, viewMatrix, screenWidth, screenHeight) &&
+                    WorldToScreen(leftKnee, s23, viewMatrix, screenWidth, screenHeight) &&
+                    WorldToScreen(leftFoot, s25, viewMatrix, screenWidth, screenHeight))
+                {
+                    drawList->AddLine(ImVec2(s0.x, s0.y), ImVec2(s22.x, s22.y), col);
+                    drawList->AddLine(ImVec2(s22.x, s22.y), ImVec2(s23.x, s23.y), col);
+                    drawList->AddLine(ImVec2(s23.x, s23.y), ImVec2(s25.x, s25.y), col);
+                }
+
+                // Draw right leg (pelvis->thigh->knee->foot)
+                if (WorldToScreen(rightHip, s17, viewMatrix, screenWidth, screenHeight) &&
+                    WorldToScreen(rightKnee, s18, viewMatrix, screenWidth, screenHeight) &&
+                    WorldToScreen(rightFoot, s20, viewMatrix, screenWidth, screenHeight))
+                {
+                    drawList->AddLine(ImVec2(s0.x, s0.y), ImVec2(s17.x, s17.y), col);
+                    drawList->AddLine(ImVec2(s17.x, s17.y), ImVec2(s18.x, s18.y), col);
+                    drawList->AddLine(ImVec2(s18.x, s18.y), ImVec2(s20.x, s20.y), col);
+                }
+            }
+        }
+        catch (...) {
+            printf("[SkeletonESP] exception\n");
+        }
     }
 
     void DrawBoxESP() {

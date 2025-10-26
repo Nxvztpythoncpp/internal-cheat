@@ -14,6 +14,14 @@ namespace Visuals {
     extern bool teamCheck;      
     extern float boxColor[4];   
     // --------------------------
+    // --- New Skeleton ESP config ---
+    extern bool drawSkeleton;
+    extern float skeletonColor[4];
+    //-----------------------------
+    void Glow();
+    void DrawHealthESP();
+    void DrawBoxESP();
+    void DrawSkeletonESP();
     void Glow();
     void DrawHealthESP();
     void DrawBoxESP();          

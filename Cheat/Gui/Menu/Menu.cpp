@@ -223,7 +223,8 @@ namespace Menu {
         static bool glow = Visuals::glowEnabled;
         static bool glowWalls = Visuals::glowThroughWalls;
         static bool healthBar = Visuals::drawHealthBar;
-        static bool boxes = Visuals::drawBoxes;         
+        static bool boxes = Visuals::drawBoxes;    
+        static bool skeleton = Visuals::drawSkeleton;
         static bool teamChk = Visuals::teamCheck;       
         static bool& boxOut = Visuals::boxOutline;
 
@@ -253,7 +254,12 @@ namespace Menu {
         ImGui::ColorEdit4("Box Color", Visuals::boxColor);     
         if (ImGui::Checkbox("Team Check", &teamChk)) {               
             Visuals::teamCheck = teamChk;                      
-        }                                                      
+        }                            
+
+        ImGui::ColorEdit4("Skeleton Color", Visuals::skeletonColor);
+        if (ImGui::Checkbox("Skeleton ESP", &skeleton)) {
+            Visuals::drawSkeleton = skeleton;
+        }
 
     }
 

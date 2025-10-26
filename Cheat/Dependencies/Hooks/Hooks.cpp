@@ -119,6 +119,7 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
     Visuals::Glow();
     Visuals::DrawHealthESP();
     Visuals::DrawBoxESP();
+    Visuals::DrawSkeletonESP();
     Movement::BunnyHop();
     Aimbot::Run();
     Hooks::BlockGameInput(Hooks::menu_open);
