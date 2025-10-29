@@ -1,0 +1,27 @@
+# Visual Studio
+.vs/
+
+# Pastas de build e lixo
+Internal-CSGO/Cheat/Debug/
+Internal-CSGO/Cheat/Lixo/
+Internal-CSGO/Cheat/x64/
+
+# Arquivos binários comuns
+*.exe
+*.dll
+*.lib
+*.obj
+*.pdb
+
+# Arquivos temporários e de cache
+*.idb
+*.suo
+*.user
+*.ipch
+*.aps
+*.ncb
+*.opendb
+*.VC.db
+*.log
+*.tmp
+*.temp

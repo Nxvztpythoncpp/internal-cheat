@@ -1,3 +1,5 @@
+﻿#define _CRT_SECURE_NO_WARNINGS
+
 #include "Menu.h"
 #include "StyleColors.h"
 
@@ -18,6 +20,7 @@
 #include <string>
 #include <cstdio>
 #include <Windows.h>
+#include "../../Cheats/SkinChanger/SkinChanger.h"
 
 namespace Menu {
 
@@ -138,12 +141,38 @@ namespace Menu {
         }
     }
 
-    void DrawSkinsSection() {
+    void DrawSkinChangerTab()
+    {
+        ImGui::Checkbox("Enable Skin Changer", &SkinChanger::enabled);
+        ImGui::Separator();
 
-         ImGui::Text("Skinchanger NIGGER");
+        if (!SkinChanger::enabled)
+            return;
 
+        static int sel = 0;
+        ImGui::Combo("Weapon", &sel, SkinChanger::weaponNames, (int)SkinChanger::weaponCount);
+
+        int defIndex = SkinChanger::weaponIDs[sel];
+        SkinChanger::WeaponSkin& cfg = SkinChanger::skinConfig[defIndex];
+
+        ImGui::InputInt("Paint Kit", &cfg.paintKit);
+        cfg.paintKit = std::max(0, std::min(cfg.paintKit, 200000));
+
+        ImGui::InputFloat("Wear", &cfg.wear, 0.01f, 0.1f, "%.4f");
+        cfg.wear = std::max(0.0f, std::min(cfg.wear, 1.0f));
+
+        ImGui::Checkbox("StatTrak", &cfg.statTrak);
+        if (cfg.statTrak) ImGui::InputInt("Count", &cfg.statTrakCount);
+
+        static char nameBuf[64] = {};
+        if (cfg.customName != nameBuf)
+            strncpy_s(nameBuf, cfg.customName.c_str(), sizeof(nameBuf) - 1);
+
+        if (ImGui::InputText("Name", nameBuf, IM_ARRAYSIZE(nameBuf)))
+            cfg.customName = nameBuf;
+
+        ImGui::Text("Changes apply instantly");
     }
-
 
     void DrawRagebotSection() {
         ImGui::Text("Ragebot Settings");
@@ -374,7 +403,25 @@ namespace Menu {
             ImVec2 avatarPos(headerMax.x - 64, headerMin.y + 8);
             float avatarSize = 40.0f;
             dl->AddRectFilled(ImVec2(avatarPos.x, avatarPos.y), ImVec2(avatarPos.x + avatarSize, avatarPos.y + avatarSize), IM_COL32(22, 22, 30, 255), 8.0f);
-            dl->AddText(ImVec2(avatarPos.x + 12, avatarPos.y + 10), IM_COL32(240, 240, 255, 255), ICON_FA_GEAR);
+
+            ImVec2 buttonPos = ImVec2(avatarPos.x + 12, avatarPos.y + 10);
+            ImGui::SetCursorScreenPos(buttonPos);
+
+            ImVec2 buttonSize = ImVec2(20, 20);
+
+            if (ImGui::InvisibleButton("settingsButton", buttonSize)) {
+                ImGui::OpenPopup("SettingsWindow");
+            }
+
+            ImDrawList* dl = ImGui::GetWindowDrawList();
+            dl->AddText(buttonPos, IM_COL32(240, 240, 255, 255), ICON_FA_GEAR);
+
+            if (ImGui::BeginPopup("SettingsWindow")) {
+                ImGui::Text("Settings here");
+                ImGui::Text("Injection timer");
+                ImGui::Text("Menu personalization");
+                ImGui::EndPopup();
+            }
 
         }
 
@@ -410,6 +457,7 @@ namespace Menu {
         case SidebarSection::Stats: DrawStatsSection(); break;
         case SidebarSection::Ragebot: DrawRagebotSection(); break;
         case SidebarSection::AntiAim: DrawAntiAimSection(); break;
+        case SidebarSection::Skins: DrawSkinChangerTab(); break;
         case SidebarSection::Visuals: DrawVisualsSection(); break;
         case SidebarSection::Misc: DrawMiscSection(); break;
         case SidebarSection::Configs: DrawConfigsSection(); break;

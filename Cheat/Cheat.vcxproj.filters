@@ -69,6 +69,9 @@
     <ClCompile Include="Gui\Fonts\Fonts.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="Cheats\SkinChanger\SkinChanger.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gui\Menu\Menu.h">
@@ -134,11 +137,11 @@
     <ClInclude Include="Cheats\Misc\Movement.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
+    <ClInclude Include="Cheats\SkinChanger\SkinChanger.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\MinHook\MinHook.x86.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="..\..\..\..\Downloads\Font Awesome 7 Free-Solid-900.otf" />
   </ItemGroup>
 </Project>

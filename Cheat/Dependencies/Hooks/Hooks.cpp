@@ -13,6 +13,7 @@
 #include <d3d9.h>
 #include <stdio.h>
 #include <iostream>
+#include "../../Cheats/SkinChanger/SkinChanger.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -122,6 +123,7 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
     Visuals::DrawSkeletonESP();
     Movement::BunnyHop();
     Aimbot::Run();
+    SkinChanger::Run();
     Hooks::BlockGameInput(Hooks::menu_open);
     Menu::Draw();
 

@@ -139,6 +139,7 @@
     <ClCompile Include="Cheats\Misc\Movement.cpp" />
     <ClCompile Include="Cheats\Misc\UninjectHook.cpp" />
     <ClCompile Include="Cheats\Rage\Aimbot.cpp" />
+    <ClCompile Include="Cheats\SkinChanger\SkinChanger.cpp" />
     <ClCompile Include="Cheats\Visuals\Visuals.cpp" />
     <ClCompile Include="Dependencies\CSGO\SDK\HookSDK.cpp" />
     <ClCompile Include="Dependencies\Hooks\Hooks.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Cheats\Misc\Movement.h" />
     <ClInclude Include="Cheats\Misc\UninjectHook.h" />
     <ClInclude Include="Cheats\Rage\Aimbot.h" />
+    <ClInclude Include="Cheats\SkinChanger\SkinChanger.h" />
     <ClInclude Include="Cheats\Visuals\Visuals.h" />
     <ClInclude Include="Dependencies\CSGO\SDK\HookSDK.h" />
     <ClInclude Include="Dependencies\Hooks\Hooks.h" />
@@ -180,9 +182,6 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\MinHook\MinHook.x86.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="..\..\..\..\Downloads\Font Awesome 7 Free-Solid-900.otf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

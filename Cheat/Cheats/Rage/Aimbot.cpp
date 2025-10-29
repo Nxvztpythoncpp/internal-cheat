@@ -65,6 +65,7 @@ namespace Aimbot {
 
     void Run() {
         //printf("[Aimbot] Run() entry. enabled=%d silent=%d aim_key=%d\n", (int)enabled, (int)silent, aim_key);
+        if (Memory::clientDll == 0 && !Memory::Initialize()) return;
         OutputDebugStringA(" Aimbot::Run() trigger\n");
 
         if (!enabled) {
