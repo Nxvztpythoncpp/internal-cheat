@@ -141,6 +141,7 @@
     <ClCompile Include="Cheats\Misc\UninjectHook.cpp" />
     <ClCompile Include="Cheats\Rage\Aimbot.cpp" />
     <ClCompile Include="Cheats\SkinChanger\SkinChanger.cpp" />
+    <ClCompile Include="Cheats\Visuals\Chams.cpp" />
     <ClCompile Include="Cheats\Visuals\Visuals.cpp" />
     <ClCompile Include="Dependencies\CSGO\SDK\HookSDK.cpp" />
     <ClCompile Include="Dependencies\Hooks\Hooks.cpp" />
@@ -171,8 +172,10 @@
     <ClInclude Include="Cheats\Misc\UninjectHook.h" />
     <ClInclude Include="Cheats\Rage\Aimbot.h" />
     <ClInclude Include="Cheats\SkinChanger\SkinChanger.h" />
+    <ClInclude Include="Cheats\Visuals\Chams.h" />
     <ClInclude Include="Cheats\Visuals\Visuals.h" />
     <ClInclude Include="Dependencies\CSGO\SDK\HookSDK.h" />
+    <ClInclude Include="Dependencies\CSGO\SDK\IVModelRender.h" />
     <ClInclude Include="Dependencies\Hooks\Hooks.h" />
     <ClInclude Include="Dependencies\Kiero\kiero.h" />
     <ClInclude Include="Dependencies\MinHook\MinHook.h" />

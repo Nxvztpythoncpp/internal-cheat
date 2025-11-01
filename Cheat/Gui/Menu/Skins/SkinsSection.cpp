@@ -1,6 +1,7 @@
 ﻿// skinsselection.cpp
 #include "SkinsSection.h"
 #include "../../../Cheats/SkinChanger/SkinChanger.h"
+#include "../../Fonts/IconsFontAwesome.h"
 #include "../../../Memory/Memory.h"
 #include "../../../Memory/Offsets.h"
 #include <algorithm>
@@ -67,7 +68,7 @@ namespace Menu
                     it->second.customName.c_str());
             }
             ImGui::EndChild();
-            if (ImGui::Button("➕ Add Skin", ImVec2(ImGui::GetContentRegionAvail().x, 32)))
+            if (ImGui::Button(ICON_PLUS " Add Skin", ImVec2(ImGui::GetContentRegionAvail().x, 32)))
                 stage = 1;
             return;
         }
@@ -77,13 +78,13 @@ namespace Menu
             static int combo = 0;
             ImGui::Text("Step 1/3 — Choose Weapon");
             ImGui::Combo("Weapon", &combo, SkinChanger::weaponNames, (int)SkinChanger::weaponCount);
-            if (ImGui::Button("Next →", ImVec2(ImGui::GetContentRegionAvail().x, 30)))
+            if (ImGui::Button("Next " ICON_FA_ARROW_RIGHT, ImVec2(ImGui::GetContentRegionAvail().x, 30)))
             {
                 selWeapon = combo;
                 weaponName = SkinChanger::weaponNames[selWeapon];
                 stage = 2;
             }
-            if (ImGui::Button("← Back")) stage = 0;
+            if (ImGui::Button(ICON_FA_ARROW_LEFT" Back")) stage = 0;
             return;
         }
 
@@ -113,13 +114,13 @@ namespace Menu
             }
             ImGui::EndChild();
 
-            if (ImGui::Button("Next →", ImVec2(ImGui::GetContentRegionAvail().x, 30)))
+            if (ImGui::Button("Next " ICON_FA_ARROW_RIGHT, ImVec2(ImGui::GetContentRegionAvail().x, 30)))
             {
                 int def = SkinChanger::weaponIDs[selWeapon];
                 SkinChanger::skinConfig[def].paintKit = chosen.paintKit;
                 stage = 3;
             }
-            if (ImGui::Button("← Back")) stage = 1;
+            if (ImGui::Button(ICON_FA_ARROW_LEFT" Back")) stage = 1;
             return;
         }
 
@@ -159,7 +160,7 @@ namespace Menu
                 ForceUpdate();
                 stage = 0;
             }
-            if (ImGui::Button("← Back")) stage = 2;
+            if (ImGui::Button(ICON_FA_ARROW_LEFT" Back")) stage = 2;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿#include "SkinChanger.h"
+﻿// SkinChanger.cpp
+#include "SkinChanger.h"
 #include "../../Memory/Memory.h"
 #include "../../Memory/Offsets.h"
 #include <Windows.h>
@@ -9,10 +10,18 @@
 #include <chrono>
 #include <atomic>
 #include <vector>
-#include "../../Gui/Menu/Skins/skins_db.h"
+#include <mutex>
+#include <cstdio>
+#include "../../Gui/Menu/Skins/skins_db.h" // assume este header fornece skins_db
 
 namespace SkinChanger
 {
+    // NOTE:
+    // - Não redeclara WeaponSkin (está em SkinChanger.h).
+    // - Não declara extern bool enabled / weaponIDs / weaponNames / weaponCount
+    //   porque eles já são definidos como `inline` no header.
+    // - Aqui definimos a única definição do skinConfig (declarada extern no .h).
+
     std::unordered_map<int, WeaponSkin> skinConfig;
 
     struct ActiveWeaponState {
@@ -22,6 +31,8 @@ namespace SkinChanger
     };
 
     static std::unordered_map<uintptr_t, ActiveWeaponState> activeWeapons;
+    static std::mutex activeWeaponsMutex;
+
     static std::atomic<bool> skinThreadRunning = false;
     static std::thread skinThread;
     constexpr size_t MAX_CUSTOM_NAME = 32;
@@ -44,6 +55,7 @@ namespace SkinChanger
     {
         if (!weapon) return;
 
+        // Escrever campos principais (offsets do teu Offsets.h)
         Memory::Write<int>(weapon + offsets::m_nFallbackPaintKit, std::clamp(skin.paintKit, 0, 200000));
         Memory::Write<float>(weapon + offsets::m_flFallbackWear, std::clamp(skin.wear, 0.0f, 1.0f));
         Memory::Write<int>(weapon + offsets::m_nFallbackSeed, skin.seed);
@@ -52,11 +64,14 @@ namespace SkinChanger
         Memory::Write<int>(weapon + offsets::m_iEntityQuality, 3);
         WriteCustomName(weapon, skin.customName);
 
-        uintptr_t clientState = Memory::Read<uintptr_t>(Memory::engineDll + offsets::dwClientState);
-        if (clientState)
-            Memory::Write<int>(clientState + offsets::dwClientState_PlayerInfo + 0x174, -1);
+        // Forçar atualização do ClientState para aplicar mudanças visualmente
+        if (Memory::engineDll) {
+            uintptr_t clientState = Memory::Read<uintptr_t>(Memory::engineDll + offsets::dwClientState);
+            if (clientState)
+                Memory::Write<int>(clientState + offsets::dwClientState_PlayerInfo + 0x174, -1);
+        }
 
-        DebugPrint("[SkinChanger] Applied skin %d to weapon at 0x%p", skin.paintKit, (void*)weapon);
+        //DebugPrint("Applied skin paintkit=%d to weapon 0x%p", skin.paintKit, (void*)weapon);
     }
 
     void ResetWeaponSkin(uintptr_t weapon)
@@ -71,10 +86,11 @@ namespace SkinChanger
         Write<int>(weapon + m_nFallbackStatTrak, -1);
         Write<int>(weapon + m_iItemIDHigh, 0);
 
-        for (size_t i = 0; i < 32; ++i)
+        // Limpar nome personalizado
+        for (size_t i = 0; i < MAX_CUSTOM_NAME; ++i)
             Write<char>(weapon + m_szCustomName + i, '\0');
 
-        DebugPrint("[SkinChanger] Reset weapon skin at 0x%p", (void*)weapon);
+        //DebugPrint("Reset weapon skin at 0x%p", (void*)weapon);
     }
 
     void ForceFullUpdate()
@@ -85,7 +101,7 @@ namespace SkinChanger
         uintptr_t clientState = Read<uintptr_t>(Memory::engineDll + dwClientState);
         if (!clientState) return;
         Write<int>(clientState + dwClientState_PlayerInfo + 0x174, -1);
-        DebugPrint("[SkinChanger] ForceFullUpdate sent");
+        //DebugPrint("ForceFullUpdate sent");
     }
 
     void RemoveSkin(int defIndex)
@@ -93,6 +109,7 @@ namespace SkinChanger
         using namespace Memory;
         using namespace offsets;
 
+        if (!Memory::clientDll) return;
         uintptr_t localPlayer = Read<uintptr_t>(Memory::clientDll + dwLocalPlayer);
         if (!localPlayer) return;
 
@@ -112,7 +129,7 @@ namespace SkinChanger
 
         if (any) {
             skinConfig.erase(defIndex);
-            DebugPrint("[SkinChanger] Removed skin for weapon defIndex %d", defIndex);
+            //DebugPrint("Removed skin for weapon defIndex %d", defIndex);
             ForceFullUpdate();
         }
     }
@@ -125,22 +142,23 @@ namespace SkinChanger
         return "Unknown Weapon";
     }
 
+    // Thread que aplica skins
     static void SkinApplyThread()
     {
+        using namespace std::chrono_literals;
+
         while (skinThreadRunning)
         {
             if (!enabled) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                std::this_thread::sleep_for(500ms);
                 continue;
             }
 
             uintptr_t localPlayer = Memory::Read<uintptr_t>(Memory::clientDll + offsets::dwLocalPlayer);
             if (!localPlayer) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                std::this_thread::sleep_for(100ms);
                 continue;
             }
-
-            bool anyChanged = false;
 
             for (int i = 0; i < 8; ++i)
             {
@@ -160,25 +178,23 @@ namespace SkinChanger
                 if (it == skinConfig.end()) continue;
 
                 auto& wstate = activeWeapons[weapon];
+                float timeNow = GetTimeSeconds();
 
-                // always apply if weapon is new or config changed
-                bool shouldApply = wstate.weapon != weapon || !wstate.applied;
-                if (shouldApply)
+                if (wstate.weapon != weapon)
+                {
+                    wstate.weapon = weapon;
+                    wstate.firstSeenTime = timeNow;
+                    wstate.applied = false;
+                }
+
+                if (!wstate.applied || (timeNow - wstate.firstSeenTime) < 5.f)
                 {
                     ApplySkinToWeapon(weapon, it->second);
-                    wstate.weapon = weapon;
                     wstate.applied = true;
-                    anyChanged = true;
                 }
             }
-
-            if (anyChanged)
-                ForceFullUpdate();
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(1)); // tiny sleep to prevent 100% CPU
         }
     }
-
 
     void Run()
     {
@@ -186,17 +202,18 @@ namespace SkinChanger
         {
             skinThreadRunning = true;
             skinThread = std::thread(SkinApplyThread);
-            DebugPrint("[SkinChanger] Skin thread started");
+            //DebugPrint("Skin thread started");
         }
         else if (!enabled && skinThreadRunning)
         {
             skinThreadRunning = false;
             if (skinThread.joinable())
                 skinThread.join();
-            DebugPrint("[SkinChanger] Skin thread stopped");
+            //DebugPrint("Skin thread stopped");
         }
     }
 
+    // Mapeamento token->nome (para UI)
     static std::unordered_map<std::string, std::string> weaponNameToToken = {
         {"AK-47", "ak47"}, {"M4A4", "m4a4"}, {"M4A1-S", "m4a1_silencer"}, {"AWP", "awp"},
         {"Glock-18", "glock"}, {"USP-S", "usp_silencer"}, {"Desert Eagle", "deagle"},
@@ -219,6 +236,16 @@ namespace SkinChanger
         }
     }
 
-    void SaveSkins() {}
-    void LoadSkins() {}
-}
+    // Simplified save/load (stub) - integrate com a tua persistência se necessário
+    void SaveSkins()
+    {
+        // TODO: serializar skinConfig para ficheiro se necessário
+        //DebugPrint("SaveSkins called (not implemented)");
+    }
+
+    void LoadSkins()
+    {
+        // TODO: desserializar skinConfig de ficheiro se necessário
+        //DebugPrint("LoadSkins called (not implemented)");
+    }
+} // namespace SkinChanger
