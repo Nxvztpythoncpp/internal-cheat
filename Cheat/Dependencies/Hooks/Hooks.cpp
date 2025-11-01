@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "../../Cheats/SkinChanger/SkinChanger.h"
+#include "../../Cheats/Misc/radar.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -124,6 +125,7 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
     Movement::BunnyHop();
     Aimbot::Run();
     SkinChanger::Run();
+    RadarHack::Run();
     Hooks::BlockGameInput(Hooks::menu_open);
     Menu::Draw();
 

@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cheats\Misc\Movement.cpp" />
+    <ClCompile Include="Cheats\Misc\radar.cpp" />
     <ClCompile Include="Cheats\Misc\UninjectHook.cpp" />
     <ClCompile Include="Cheats\Rage\Aimbot.cpp" />
     <ClCompile Include="Cheats\SkinChanger\SkinChanger.cpp" />
@@ -166,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cheats\Misc\Movement.h" />
+    <ClInclude Include="Cheats\Misc\radar.h" />
     <ClInclude Include="Cheats\Misc\UninjectHook.h" />
     <ClInclude Include="Cheats\Rage\Aimbot.h" />
     <ClInclude Include="Cheats\SkinChanger\SkinChanger.h" />
