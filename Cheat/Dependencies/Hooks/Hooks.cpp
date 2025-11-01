@@ -125,7 +125,7 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
     Movement::BunnyHop();
     Aimbot::Run();
     SkinChanger::Run();
-    RadarHack::Run();
+    Radar::Run();
     Hooks::BlockGameInput(Hooks::menu_open);
     Menu::Draw();
 

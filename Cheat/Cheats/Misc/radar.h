@@ -1,5 +1,5 @@
 #pragma once
 
-namespace RadarHack {
+namespace Radar {
     void Run();
 }

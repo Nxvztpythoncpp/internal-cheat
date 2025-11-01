@@ -1,12 +1,13 @@
 #include "MiscSection.h"
 #include "../../../Cheats/Misc/UninjectHook.h"
 #include"../../../Cheats/Misc/Movement.h"
+#include "../../../Cheats/Config/config_vars.h"
 
 void Menu::DrawMiscSection() {
     ImGui::Text("Misc Settings");
     static bool& bhop = Movement::BunnyhopEnabled;
     static bool bunnyhop = false;
-    static bool radar = false;
+    static bool& radar = g_cfg::misc::radar;
 
     ImGui::Checkbox("Bunny Hop", &bhop);
     ImGui::Checkbox("Perfect Bunnyhop", &bunnyhop);
