@@ -152,7 +152,15 @@
     <ClCompile Include="Gui\Imgui\imgui_draw.cpp" />
     <ClCompile Include="Gui\Imgui\imgui_tables.cpp" />
     <ClCompile Include="Gui\Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Gui\Menu\AntiAim\AntiAim.cpp" />
+    <ClCompile Include="Gui\Menu\Configs\ConfigsSetction.cpp" />
+    <ClCompile Include="Gui\Menu\Data\GetData.cpp" />
+    <ClCompile Include="Gui\Menu\Lua\LuasSection.cpp" />
     <ClCompile Include="Gui\Menu\Menu.cpp" />
+    <ClCompile Include="Gui\Menu\Misc\MiscSection.cpp" />
+    <ClCompile Include="Gui\Menu\Ragebot\RagebotSection.cpp" />
+    <ClCompile Include="Gui\Menu\Skins\SkinsSection.cpp" />
+    <ClCompile Include="Gui\Menu\Visuals\VisualsSection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
   </ItemGroup>
@@ -175,8 +183,16 @@
     <ClInclude Include="Gui\Imgui\ImGuiHelpers.h" />
     <ClInclude Include="Gui\Imgui\imgui_internal.h" />
     <ClInclude Include="Gui\Fonts\IconsFontAwesome.h" />
+    <ClInclude Include="Gui\Menu\AntiAim\AntiAim.h" />
+    <ClInclude Include="Gui\Menu\Configs\ConfigsSection.h" />
+    <ClInclude Include="Gui\Menu\Data\GetData.h" />
+    <ClInclude Include="Gui\Menu\Lua\LuasSection.h" />
     <ClInclude Include="Gui\Menu\Menu.h" />
+    <ClInclude Include="Gui\Menu\Misc\MiscSection.h" />
+    <ClInclude Include="Gui\Menu\Ragebot\RagebotSection.h" />
+    <ClInclude Include="Gui\Menu\Skins\SkinsSection.h" />
     <ClInclude Include="Gui\Menu\StyleColors.h" />
+    <ClInclude Include="Gui\Menu\Visuals\VisualsSection.h" />
     <ClInclude Include="Memory\Memory.h" />
     <ClInclude Include="Memory\Offsets.h" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 #include "Memory.h"
+#include <cstring>
 #include <windows.h>
 #include <TlHelp32.h>
 #include <string>
@@ -71,5 +72,19 @@ namespace Memory
         MessageBoxA(nullptr, "Failed to find client/engine modules (are you injected into CS:GO?)",
             "Memory Error", MB_OK | MB_ICONERROR);
         return false;
+    }
+
+    void WriteArray(uintptr_t address, const void* data, size_t size)
+    {
+        if (!address || !data || !size)
+            return;
+
+        DWORD oldProtect;
+        // Temporarily make memory writable (avoids protection issues)
+        if (VirtualProtect(reinterpret_cast<void*>(address), size, PAGE_EXECUTE_READWRITE, &oldProtect))
+        {
+            memcpy(reinterpret_cast<void*>(address), data, size);
+            VirtualProtect(reinterpret_cast<void*>(address), size, oldProtect, &oldProtect);
+        }
     }
 }

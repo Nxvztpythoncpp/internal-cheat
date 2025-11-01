@@ -16,6 +16,8 @@ namespace SkinChanger
     };
 
     inline bool enabled = false;
+
+    // declaração externa — a definição fica em SkinChanger.cpp
     extern std::unordered_map<int, WeaponSkin> skinConfig;
 
     inline const int weaponIDs[] = {
@@ -51,10 +53,18 @@ namespace SkinChanger
     void LoadSkins();
     const char* GetWeaponName(int defIndex);
 
-    inline void DebugPrint(const std::string& msg)
+    // nova função pública para popular o menu com o skins_db.h gerado
+    void LoadSkinsDBToMenu(std::unordered_map<std::string, std::vector<std::pair<std::string, int>>>& out);
+
+    inline void DebugPrint(const char* format, ...)
     {
-        printf("[SkinChanger] %s\n", msg.c_str());
+        va_list args;
+        va_start(args, format);
+        printf("[SkinChanger] ");
+        vprintf(format, args);
+        printf("\n");
+        va_end(args);
     }
 
-    inline void WriteCustomName(uintptr_t weapon, const std::string& name);
+    void WriteCustomName(uintptr_t weapon, const std::string& name);
 }

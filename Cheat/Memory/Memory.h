@@ -1,7 +1,8 @@
-#pragma once
+﻿#pragma once
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <cstdint>
+#include <cstring>
 
 namespace Memory
 {
@@ -25,4 +26,6 @@ namespace Memory
             return;
         *reinterpret_cast<T*>(address) = value;
     }
+
+    void WriteArray(uintptr_t address, const void* data, size_t size);
 }
