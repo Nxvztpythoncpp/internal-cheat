@@ -162,7 +162,6 @@
     <ClCompile Include="Gui\Menu\Menu.cpp" />
     <ClCompile Include="Gui\Menu\Misc\MiscSection.cpp" />
     <ClCompile Include="Gui\Menu\Ragebot\RagebotSection.cpp" />
-    <ClCompile Include="Gui\Menu\RenderUtils.cpp" />
     <ClCompile Include="Gui\Menu\Skins\SkinsSection.cpp" />
     <ClCompile Include="Gui\Menu\Visuals\VisualsSection.cpp" />
     <ClCompile Include="main.cpp" />
@@ -199,7 +198,6 @@
     <ClInclude Include="Gui\Menu\Menu.h" />
     <ClInclude Include="Gui\Menu\Misc\MiscSection.h" />
     <ClInclude Include="Gui\Menu\Ragebot\RagebotSection.h" />
-    <ClInclude Include="Gui\Menu\RenderUtils.h" />
     <ClInclude Include="Gui\Menu\Skins\SkinsSection.h" />
     <ClInclude Include="Gui\Menu\StyleColors.h" />
     <ClInclude Include="Gui\Menu\Visuals\VisualsSection.h" />

@@ -14,7 +14,6 @@
 namespace Aimbot {
     bool enabled = false;
     float fov = 180.0f;
-    bool draw_fov_circle = false;
     bool silent = false;
     bool rcs = false;
     bool visibility_check = false;

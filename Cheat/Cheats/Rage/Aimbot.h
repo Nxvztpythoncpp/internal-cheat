@@ -8,7 +8,6 @@
 namespace Aimbot {
     extern bool enabled;
     extern float fov;
-    extern bool draw_fov_circle;
     extern bool silent;
     extern bool rcs;
     extern bool visibility_check;
