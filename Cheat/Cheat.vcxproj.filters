@@ -1,208 +1,73 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Arquivos de Origem">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Arquivos de Cabeçalho">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Arquivos de Recurso">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="Cheats\Misc\Movement.cpp" />
+    <ClCompile Include="Cheats\Misc\radar.cpp" />
+    <ClCompile Include="Cheats\Misc\UninjectHook.cpp" />
+    <ClCompile Include="Cheats\Rage\Aimbot.cpp" />
+    <ClCompile Include="Cheats\SkinChanger\SkinChanger.cpp" />
+    <ClCompile Include="Cheats\Visuals\Chams.cpp" />
+    <ClCompile Include="Cheats\Visuals\Visuals.cpp" />
+    <ClCompile Include="Dependencies\CacheSystem\CacheSystem.cpp" />
+    <ClCompile Include="Dependencies\CSGO\SDK\HookSDK.cpp" />
+    <ClCompile Include="Dependencies\Hooks\Hooks.cpp" />
+    <ClCompile Include="Dependencies\Kiero\kiero.cpp" />
+    <ClCompile Include="Gui\Fonts\Fonts.cpp" />
+    <ClCompile Include="Gui\Imgui\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Gui\Imgui\backends\imgui_impl_dx9.cpp" />
+    <ClCompile Include="Gui\Imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="Gui\Imgui\imgui.cpp" />
+    <ClCompile Include="Gui\Imgui\imgui_draw.cpp" />
+    <ClCompile Include="Gui\Imgui\imgui_tables.cpp" />
+    <ClCompile Include="Gui\Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Gui\Menu\AntiAim\AntiAim.cpp" />
+    <ClCompile Include="Gui\Menu\Configs\ConfigsSetction.cpp" />
+    <ClCompile Include="Gui\Menu\Data\GetData.cpp" />
+    <ClCompile Include="Gui\Menu\Lua\LuasSection.cpp" />
+    <ClCompile Include="Gui\Menu\Menu.cpp" />
+    <ClCompile Include="Gui\Menu\Misc\MiscSection.cpp" />
+    <ClCompile Include="Gui\Menu\Ragebot\RagebotSection.cpp" />
+    <ClCompile Include="Gui\Menu\Skins\SkinsSection.cpp" />
+    <ClCompile Include="Gui\Menu\Visuals\VisualsSection.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Memory\Memory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Gui\Menu\Menu.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Imgui\imgui_draw.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Imgui\imgui.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Imgui\imgui_widgets.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Imgui\imgui_tables.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Imgui\backends\imgui_impl_dx11.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Imgui\backends\imgui_impl_win32.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Imgui\backends\imgui_impl_dx9.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\Hooks\Hooks.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\Kiero\kiero.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\CSGO\SDK\HookSDK.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Cheats\Misc\Movement.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Cheats\Rage\Aimbot.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Memory\Memory.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Cheats\Visuals\Visuals.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Cheats\Misc\UninjectHook.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Fonts\Fonts.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Cheats\SkinChanger\SkinChanger.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Menu\Data\GetData.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Menu\Lua\LuasSection.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Menu\Ragebot\RagebotSection.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Menu\Misc\MiscSection.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Menu\Visuals\VisualsSection.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Menu\Configs\ConfigsSetction.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Menu\Skins\SkinsSection.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui\Menu\AntiAim\AntiAim.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Cheats\Misc\radar.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Cheats\Visuals\Chams.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Gui\Menu\Menu.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Imgui\imgui.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Imgui\backends\imgui_impl_dx11.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Imgui\backends\imgui_impl_win32.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Imgui\imconfig.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Imgui\imgui_internal.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\MinHook\MinHook.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Imgui\backends\imgui_impl_dx9.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\Hooks\Hooks.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\Kiero\kiero.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Menu\StyleColors.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\CSGO\SDK\HookSDK.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Memory\Offsets.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Cheats\Rage\Aimbot.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Memory\Memory.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Imgui\ImGuiHelpers.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Cheats\Visuals\Visuals.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Cheats\Misc\UninjectHook.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Fonts\IconsFontAwesome.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Fonts\Fonts.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Cheats\Misc\Movement.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Cheats\SkinChanger\SkinChanger.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Menu\Data\GetData.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Menu\Lua\LuasSection.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Menu\Ragebot\RagebotSection.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Menu\Misc\MiscSection.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Menu\Visuals\VisualsSection.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Menu\Configs\ConfigsSection.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Menu\Skins\SkinsSection.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui\Menu\AntiAim\AntiAim.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Cheats\Misc\radar.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Cheats\Visuals\Chams.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\CSGO\SDK\IVModelRender.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
+    <ClInclude Include="Cheats\Misc\Movement.h" />
+    <ClInclude Include="Cheats\Misc\radar.h" />
+    <ClInclude Include="Cheats\Misc\UninjectHook.h" />
+    <ClInclude Include="Cheats\Rage\Aimbot.h" />
+    <ClInclude Include="Cheats\SkinChanger\SkinChanger.h" />
+    <ClInclude Include="Cheats\Visuals\Chams.h" />
+    <ClInclude Include="Cheats\Visuals\Visuals.h" />
+    <ClInclude Include="Dependencies\CacheSystem\CacheSystem.h" />
+    <ClInclude Include="Dependencies\CSGO\SDK\HookSDK.h" />
+    <ClInclude Include="Dependencies\CSGO\SDK\IVModelRender.h" />
+    <ClInclude Include="Dependencies\Hooks\Hooks.h" />
+    <ClInclude Include="Dependencies\Kiero\kiero.h" />
+    <ClInclude Include="Dependencies\MinHook\MinHook.h" />
+    <ClInclude Include="Gui\Fonts\Fonts.h" />
+    <ClInclude Include="Gui\Imgui\backends\imgui_impl_dx9.h" />
+    <ClInclude Include="Gui\Imgui\imconfig.h" />
+    <ClInclude Include="Gui\Imgui\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="Gui\Imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="Gui\Imgui\imgui.h" />
+    <ClInclude Include="Gui\Imgui\ImGuiHelpers.h" />
+    <ClInclude Include="Gui\Imgui\imgui_internal.h" />
+    <ClInclude Include="Gui\Fonts\IconsFontAwesome.h" />
+    <ClInclude Include="Gui\Menu\AntiAim\AntiAim.h" />
+    <ClInclude Include="Gui\Menu\Configs\ConfigsSection.h" />
+    <ClInclude Include="Gui\Menu\Data\GetData.h" />
+    <ClInclude Include="Gui\Menu\Lua\LuasSection.h" />
+    <ClInclude Include="Gui\Menu\Menu.h" />
+    <ClInclude Include="Gui\Menu\Misc\MiscSection.h" />
+    <ClInclude Include="Gui\Menu\Ragebot\RagebotSection.h" />
+    <ClInclude Include="Gui\Menu\Skins\SkinsSection.h" />
+    <ClInclude Include="Gui\Menu\StyleColors.h" />
+    <ClInclude Include="Gui\Menu\Visuals\VisualsSection.h" />
+    <ClInclude Include="Memory\Memory.h" />
+    <ClInclude Include="Memory\Offsets.h" />
+    <ClInclude Include="Dependencies\Patches\Patches.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\MinHook\MinHook.x86.lib" />

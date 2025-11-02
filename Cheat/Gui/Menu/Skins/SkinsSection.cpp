@@ -29,7 +29,7 @@ namespace Menu
         {
             std::vector<SkinOption> vec;
             for (auto& [sname, pid] : list)
-                vec.push_back({ sname, pid, ImVec4(0.8f, 0.8f, 0.8f, 1.0f) });
+                vec.push_back({ sname, pid, ImVec4(0.18f, 0.18f, 0.18f, 1.0f) });
             skinDatabase[wname] = std::move(vec);
         }
     }
@@ -52,93 +52,145 @@ namespace Menu
         static SkinOption chosen;
         static int selSkin = -1;
 
-        ImGui::SeparatorText("My Skins");
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.f);
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 6));
 
+        ImGui::SeparatorText(ICON_FA_PALLETE" Skin Customizer");
+        ImGui::Spacing();
+
+        // -------- STEP 0: Overview --------
         if (stage == 0)
         {
-            ImGui::BeginChild("##skins", ImVec2(0, 300), true);
+            ImGui::TextColored(ImVec4(0.8f, 0.8f, 1.f, 1.f), "My Equipped Skins");
+            ImGui::BeginChild("##skins", ImVec2(0, 300), true, ImGuiWindowFlags_AlwaysUseWindowPadding);
+
             for (size_t i = 0; i < SkinChanger::weaponCount; ++i)
             {
                 int def = SkinChanger::weaponIDs[i];
                 auto it = SkinChanger::skinConfig.find(def);
                 if (it == SkinChanger::skinConfig.end()) continue;
-                ImGui::Text("%s — %s", SkinChanger::GetWeaponName(def),
-                    it->second.customName.empty() ?
-                    ("PaintKit " + std::to_string(it->second.paintKit)).c_str() :
-                    it->second.customName.c_str());
+
+                ImGui::Separator();
+                ImGui::Text("%s", SkinChanger::GetWeaponName(def));
+                ImGui::SameLine();
+                ImGui::TextDisabled("—");
+                ImGui::SameLine();
+                ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f),
+                    it->second.customName.empty()
+                    ? ("PaintKit " + std::to_string(it->second.paintKit)).c_str()
+                    : it->second.customName.c_str());
             }
+
             ImGui::EndChild();
-            if (ImGui::Button(ICON_PLUS " Add Skin", ImVec2(ImGui::GetContentRegionAvail().x, 32)))
+            ImGui::Spacing();
+
+            if (ImGui::Button(ICON_FA_PLUS "  Add Skin", ImVec2(ImGui::GetContentRegionAvail().x, 36)))
                 stage = 1;
+
+            ImGui::PopStyleVar(2);
             return;
         }
 
+        // -------- STEP 1: Choose Weapon --------
         if (stage == 1)
         {
+            ImGui::TextColored(ImVec4(0.6f, 0.8f, 1.f, 1.f), "Step 1 / 3 — Choose Weapon");
+            ImGui::SameLine(ImGui::GetContentRegionAvail().x - 85); // move o botão para o lado direito
+            if (ImGui::Button(ICON_FA_ARROW_LEFT "  Back", ImVec2(80, 26)))
+                stage = 0;
+
+            ImGui::Separator();
+            ImGui::Spacing();
+
             static int combo = 0;
-            ImGui::Text("Step 1/3 — Choose Weapon");
-            ImGui::Combo("Weapon", &combo, SkinChanger::weaponNames, (int)SkinChanger::weaponCount);
-            if (ImGui::Button("Next " ICON_FA_ARROW_RIGHT, ImVec2(ImGui::GetContentRegionAvail().x, 30)))
+            ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+            ImGui::Combo("##weaponCombo", &combo, SkinChanger::weaponNames, (int)SkinChanger::weaponCount);
+
+            ImGui::Spacing();
+            if (ImGui::Button("Next  " ICON_FA_ARROW_RIGHT, ImVec2(ImGui::GetContentRegionAvail().x, 34)))
             {
                 selWeapon = combo;
                 weaponName = SkinChanger::weaponNames[selWeapon];
                 stage = 2;
             }
-            if (ImGui::Button(ICON_FA_ARROW_LEFT" Back")) stage = 0;
+
+            ImGui::PopStyleVar(2);
             return;
         }
 
+        // -------- STEP 2: Choose Skin --------
         if (stage == 2)
         {
-            ImGui::Text("Step 2/3 — Choose Skin for %s", weaponName.c_str());
+            ImGui::TextColored(ImVec4(0.6f, 0.8f, 1.f, 1.f), "Step 2 / 3 — Choose Skin for %s", weaponName.c_str());
+            ImGui::SameLine(ImGui::GetContentRegionAvail().x - 85);
+            if (ImGui::Button(ICON_FA_ARROW_LEFT "  Back", ImVec2(80, 26)))
+                stage = 1;
+
+            ImGui::Separator();
+            ImGui::Spacing();
+
             auto it = skinDatabase.find(weaponName);
-            ImGui::BeginChild("##skins", ImVec2(0, 300), true);
+            ImGui::BeginChild("##skinlist", ImVec2(0, 320), true, ImGuiWindowFlags_AlwaysUseWindowPadding);
             if (it != skinDatabase.end())
             {
                 int idx = 0;
-                ImGui::Columns(3, nullptr, false);
+                const float itemWidth = ImGui::GetContentRegionAvail().x / 3.f - 8.f;
+
                 for (auto& s : it->second)
                 {
                     ImGui::PushID(idx);
                     ImGui::PushStyleColor(ImGuiCol_Button, s.color);
-                    if (ImGui::Button(s.name.c_str(), ImVec2(-FLT_MIN, 60)))
+                    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.3f, 0.3f, 1.f));
+                    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.4f, 0.4f, 1.f));
+
+                    if (ImGui::Button(s.name.c_str(), ImVec2(itemWidth, 60)))
                     {
                         selSkin = idx;
                         chosen = s;
+
+                        int def = SkinChanger::weaponIDs[selWeapon];
+                        SkinChanger::skinConfig[def].paintKit = chosen.paintKit;
+                        stage = 3;
                     }
-                    ImGui::PopStyleColor();
-                    if (++idx % 3 != 0) ImGui::NextColumn();
+
+                    if ((idx + 1) % 3 != 0)
+                        ImGui::SameLine();
+
+                    ImGui::PopStyleColor(3);
                     ImGui::PopID();
+                    idx++;
                 }
-                ImGui::Columns(1);
             }
             ImGui::EndChild();
 
-            if (ImGui::Button("Next " ICON_FA_ARROW_RIGHT, ImVec2(ImGui::GetContentRegionAvail().x, 30)))
-            {
-                int def = SkinChanger::weaponIDs[selWeapon];
-                SkinChanger::skinConfig[def].paintKit = chosen.paintKit;
-                stage = 3;
-            }
-            if (ImGui::Button(ICON_FA_ARROW_LEFT" Back")) stage = 1;
+            ImGui::PopStyleVar(2);
             return;
         }
 
+        // -------- STEP 3: Customize --------
         if (stage == 3)
         {
             int def = SkinChanger::weaponIDs[selWeapon];
             auto& cfg = SkinChanger::skinConfig[def];
 
-            ImGui::Text("Step 3/3 — Customize");
-            ImGui::InputFloat("Wear", &cfg.wear, 0.01f, 0.1f, "%.4f");
-            cfg.wear = std::clamp(cfg.wear, 0.f, 1.f);
-            ImGui::Checkbox("StatTrak", &cfg.statTrak);
+            ImGui::TextColored(ImVec4(0.6f, 0.8f, 1.f, 1.f), "Step 3 / 3 — Customize %s", weaponName.c_str());
+            ImGui::SameLine(ImGui::GetContentRegionAvail().x - 85);
+            if (ImGui::Button(ICON_FA_ARROW_LEFT "  Back", ImVec2(80, 26)))
+                stage = 2;
+
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::SliderFloat("Wear", &cfg.wear, 0.f, 1.f, "%.4f", ImGuiSliderFlags_AlwaysClamp);
+            ImGui::Checkbox("StatTrak Enabled", &cfg.statTrak);
             if (cfg.statTrak)
-                ImGui::InputInt("Count", &cfg.statTrakCount);
+                ImGui::InputInt("StatTrak Count", &cfg.statTrakCount);
+
             static char buf[64] = {};
             if (ImGui::InputText("Custom Name", buf, 64))
                 cfg.customName = buf;
 
+            ImGui::Spacing();
             if (ImGui::Button("Apply & Return", ImVec2(ImGui::GetContentRegionAvail().x, 36)))
             {
                 if (!SkinChanger::enabled) SkinChanger::enabled = true;
@@ -160,7 +212,10 @@ namespace Menu
                 ForceUpdate();
                 stage = 0;
             }
-            if (ImGui::Button(ICON_FA_ARROW_LEFT" Back")) stage = 2;
+
+            ImGui::PopStyleVar(2);
         }
     }
+
+
 }

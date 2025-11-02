@@ -52,6 +52,7 @@ namespace SkinChanger
     void SaveSkins();
     void LoadSkins();
     const char* GetWeaponName(int defIndex);
+    void ApplySkins();
 
     // nova função pública para popular o menu com o skins_db.h gerado
     void LoadSkinsDBToMenu(std::unordered_map<std::string, std::vector<std::pair<std::string, int>>>& out);
@@ -67,4 +68,5 @@ namespace SkinChanger
     }
 
     void WriteCustomName(uintptr_t weapon, const std::string& name);
+    void ForceFullUpdate();
 }

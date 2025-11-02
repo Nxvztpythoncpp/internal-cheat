@@ -15,6 +15,9 @@
 #include <iostream>
 #include "../../Cheats/SkinChanger/SkinChanger.h"
 #include "../../Cheats/Misc/radar.h"
+#include "../CacheSystem/CacheSystem.h"
+#include "../../Dependencies/Csgo/SDK/HookSDK.h"
+#include "../../Dependencies/Csgo/SDK/IVModelRender.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -118,14 +121,12 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice) {
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    Visuals::Glow();
+    UpdateFPS();
     Visuals::DrawHealthESP();
     Visuals::DrawBoxESP();
     Visuals::DrawSkeletonESP();
-    Movement::BunnyHop();
-    Aimbot::Run();
-    SkinChanger::Run();
-    Radar::Run();
+    StartCacheThread();
+    StartFunctionsThread();
     Hooks::BlockGameInput(Hooks::menu_open);
     Menu::Draw();
 

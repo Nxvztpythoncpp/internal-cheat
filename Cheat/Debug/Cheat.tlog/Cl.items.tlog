@@ -1,8 +1,11 @@
 E:\GitRepo\Internal-CSGO\Cheat\Cheats\Misc\Movement.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\Movement.obj
+E:\GitRepo\Internal-CSGO\Cheat\Cheats\Misc\radar.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\radar.obj
 E:\GitRepo\Internal-CSGO\Cheat\Cheats\Misc\UninjectHook.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\UninjectHook.obj
 E:\GitRepo\Internal-CSGO\Cheat\Cheats\Rage\Aimbot.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\Aimbot.obj
 E:\GitRepo\Internal-CSGO\Cheat\Cheats\SkinChanger\SkinChanger.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\SkinChanger.obj
+E:\GitRepo\Internal-CSGO\Cheat\Cheats\Visuals\Chams.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\Chams.obj
 E:\GitRepo\Internal-CSGO\Cheat\Cheats\Visuals\Visuals.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\Visuals.obj
+E:\GitRepo\Internal-CSGO\Cheat\Dependencies\CacheSystem\CacheSystem.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\CacheSystem.obj
 E:\GitRepo\Internal-CSGO\Cheat\Dependencies\CSGO\SDK\HookSDK.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\HookSDK.obj
 E:\GitRepo\Internal-CSGO\Cheat\Dependencies\Hooks\Hooks.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\Hooks.obj
 E:\GitRepo\Internal-CSGO\Cheat\Dependencies\Kiero\kiero.cpp;E:\GitRepo\Internal-CSGO\Cheat\Debug\kiero.obj

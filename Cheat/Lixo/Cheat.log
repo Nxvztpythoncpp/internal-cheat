@@ -15,9 +15,21 @@ C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Menu\Skins\skins_db.h(15
   
   Chams.cpp
   Visuals.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Visuals\Visuals.cpp(54,20): warning C4566: character represented by universal-character-name '\u2192' cannot be represented in the current code page (1252)
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Visuals\Visuals.cpp(60,20): warning C4566: character represented by universal-character-name '\u2192' cannot be represented in the current code page (1252)
+  CacheSystem.cpp
   HookSDK.cpp
-  Incluindo hook_sdk.h em HookSDK.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Dependencies\Hooks\Hooks.h(72,8): warning C4099: 'CUserCmd': type name first seen using 'class' now seen using 'struct'
+  (compiling source file 'Dependencies/CSGO/SDK/HookSDK.cpp')
+      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Dependencies\Hooks\Hooks.h(72,8):
+      see declaration of 'CUserCmd'
+  
   Hooks.cpp
+C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Dependencies\Csgo\SDK\HookSDK.h(8,7): warning C4099: 'CUserCmd': type name first seen using 'struct' now seen using 'class'
+  (compiling source file 'Dependencies/Hooks/Hooks.cpp')
+      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Dependencies\Hooks\Hooks.h(72,8):
+      see declaration of 'CUserCmd'
+  
   kiero.cpp
   Fonts.cpp
   imgui_impl_dx11.cpp
@@ -28,8 +40,8 @@ C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Menu\Skins\skins_db.h(15
   imgui_tables.cpp
   imgui_widgets.cpp
   AntiAim.cpp
-  ConfigsSetction.cpp
   Compiling...
+  ConfigsSetction.cpp
   GetData.cpp
   LuasSection.cpp
   Menu.cpp
@@ -77,6 +89,6 @@ C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Fonts\IconsFontAwesome.h
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
   Previous IPDB was built with incompatible compiler, fall back to full compilation.
-  All 3337 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 3297 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   Cheat.vcxproj -> C:\Users\warzo\Documents\Build\CSGO.dll

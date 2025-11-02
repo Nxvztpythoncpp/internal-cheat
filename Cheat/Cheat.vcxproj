@@ -143,6 +143,7 @@
     <ClCompile Include="Cheats\SkinChanger\SkinChanger.cpp" />
     <ClCompile Include="Cheats\Visuals\Chams.cpp" />
     <ClCompile Include="Cheats\Visuals\Visuals.cpp" />
+    <ClCompile Include="Dependencies\CacheSystem\CacheSystem.cpp" />
     <ClCompile Include="Dependencies\CSGO\SDK\HookSDK.cpp" />
     <ClCompile Include="Dependencies\Hooks\Hooks.cpp" />
     <ClCompile Include="Dependencies\Kiero\kiero.cpp" />
@@ -174,11 +175,13 @@
     <ClInclude Include="Cheats\SkinChanger\SkinChanger.h" />
     <ClInclude Include="Cheats\Visuals\Chams.h" />
     <ClInclude Include="Cheats\Visuals\Visuals.h" />
+    <ClInclude Include="Dependencies\CacheSystem\CacheSystem.h" />
     <ClInclude Include="Dependencies\CSGO\SDK\HookSDK.h" />
     <ClInclude Include="Dependencies\CSGO\SDK\IVModelRender.h" />
     <ClInclude Include="Dependencies\Hooks\Hooks.h" />
     <ClInclude Include="Dependencies\Kiero\kiero.h" />
     <ClInclude Include="Dependencies\MinHook\MinHook.h" />
+    <ClInclude Include="Dependencies\Patches\Patches.h" />
     <ClInclude Include="Gui\Fonts\Fonts.h" />
     <ClInclude Include="Gui\Imgui\backends\imgui_impl_dx9.h" />
     <ClInclude Include="Gui\Imgui\imconfig.h" />

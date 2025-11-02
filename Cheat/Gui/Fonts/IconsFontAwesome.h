@@ -16,6 +16,7 @@
 #define ICON_FA_PEN_FANCY	"\xEF\x96\xAC"
 #define ICON_FA_ARROW_LEFT	"\xEF\x81\xA0"
 #define ICON_FA_ARROW_RIGHT "\xEF\x81\xA1"
-#define ICON_PLUS			"\x2B"
+#define ICON_FA_PLUS			"\x2B"
+#define ICON_FA_PALLETE "\xEF\x94\xBF"
 
 
