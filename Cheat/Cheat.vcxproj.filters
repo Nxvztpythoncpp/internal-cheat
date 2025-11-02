@@ -31,6 +31,7 @@
     <ClCompile Include="Gui\Menu\Visuals\VisualsSection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
+    <ClCompile Include="Gui\Menu\RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cheats\Misc\Movement.h" />
@@ -68,6 +69,7 @@
     <ClInclude Include="Memory\Memory.h" />
     <ClInclude Include="Memory\Offsets.h" />
     <ClInclude Include="Dependencies\Patches\Patches.h" />
+    <ClInclude Include="Gui\Menu\RenderUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\MinHook\MinHook.x86.lib" />

@@ -5,29 +5,29 @@ C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Microsoft\VC\v170\
   UninjectHook.cpp
   Aimbot.cpp
   SkinChanger.cpp
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Rage\Aimbot.cpp(180,71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Rage\Aimbot.cpp(181,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Menu\Skins\skins_db.h(149,6): warning C4566: character represented by universal-character-name '\u58F1' cannot be represented in the current code page (1252)
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Cheats\Rage\Aimbot.cpp(181,71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Cheats\Rage\Aimbot.cpp(182,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Menu\Skins\skins_db.h(149,6): warning C4566: character represented by universal-character-name '\u58F1' cannot be represented in the current code page (1252)
   (compiling source file 'Cheats/SkinChanger/SkinChanger.cpp')
   
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Menu\Skins\skins_db.h(150,6): warning C4566: character represented by universal-character-name '\u5F10' cannot be represented in the current code page (1252)
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Menu\Skins\skins_db.h(150,6): warning C4566: character represented by universal-character-name '\u5F10' cannot be represented in the current code page (1252)
   (compiling source file 'Cheats/SkinChanger/SkinChanger.cpp')
   
   Chams.cpp
   Visuals.cpp
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Visuals\Visuals.cpp(54,20): warning C4566: character represented by universal-character-name '\u2192' cannot be represented in the current code page (1252)
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Cheats\Visuals\Visuals.cpp(60,20): warning C4566: character represented by universal-character-name '\u2192' cannot be represented in the current code page (1252)
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Cheats\Visuals\Visuals.cpp(54,20): warning C4566: character represented by universal-character-name '\u2192' cannot be represented in the current code page (1252)
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Cheats\Visuals\Visuals.cpp(60,20): warning C4566: character represented by universal-character-name '\u2192' cannot be represented in the current code page (1252)
   CacheSystem.cpp
   HookSDK.cpp
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Dependencies\Hooks\Hooks.h(72,8): warning C4099: 'CUserCmd': type name first seen using 'class' now seen using 'struct'
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Dependencies\Hooks\Hooks.h(72,8): warning C4099: 'CUserCmd': type name first seen using 'class' now seen using 'struct'
   (compiling source file 'Dependencies/CSGO/SDK/HookSDK.cpp')
-      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Dependencies\Hooks\Hooks.h(72,8):
+      C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Dependencies\Hooks\Hooks.h(72,8):
       see declaration of 'CUserCmd'
   
   Hooks.cpp
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Dependencies\Csgo\SDK\HookSDK.h(8,7): warning C4099: 'CUserCmd': type name first seen using 'struct' now seen using 'class'
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Dependencies\Csgo\SDK\HookSDK.h(8,7): warning C4099: 'CUserCmd': type name first seen using 'struct' now seen using 'class'
   (compiling source file 'Dependencies/Hooks/Hooks.cpp')
-      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Dependencies\Hooks\Hooks.h(72,8):
+      C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Dependencies\Hooks\Hooks.h(72,8):
       see declaration of 'CUserCmd'
   
   kiero.cpp
@@ -45,50 +45,52 @@ C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Dependencies\Csgo\SDK\HookSD
   GetData.cpp
   LuasSection.cpp
   Menu.cpp
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Fonts\IconsFontAwesome.h(6,9): warning C4005: 'ICON_FA_GEAR': macro redefinition
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Fonts\IconsFontAwesome.h(6,9): warning C4005: 'ICON_FA_GEAR': macro redefinition
   (compiling source file 'Gui/Menu/Menu.cpp')
-      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Imgui\ImGuiHelpers.h(29,9):
+      C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Imgui\ImGuiHelpers.h(29,9):
       see previous definition of 'ICON_FA_GEAR'
   
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Fonts\IconsFontAwesome.h(7,9): warning C4005: 'ICON_FA_CHART_SIMPLE': macro redefinition
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Fonts\IconsFontAwesome.h(7,9): warning C4005: 'ICON_FA_CHART_SIMPLE': macro redefinition
   (compiling source file 'Gui/Menu/Menu.cpp')
-      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Imgui\ImGuiHelpers.h(24,9):
+      C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Imgui\ImGuiHelpers.h(24,9):
       see previous definition of 'ICON_FA_CHART_SIMPLE'
   
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Fonts\IconsFontAwesome.h(8,9): warning C4005: 'ICON_FA_CROSSHAIRS': macro redefinition
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Fonts\IconsFontAwesome.h(8,9): warning C4005: 'ICON_FA_CROSSHAIRS': macro redefinition
   (compiling source file 'Gui/Menu/Menu.cpp')
-      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Imgui\ImGuiHelpers.h(25,9):
+      C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Imgui\ImGuiHelpers.h(25,9):
       see previous definition of 'ICON_FA_CROSSHAIRS'
   
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Fonts\IconsFontAwesome.h(9,9): warning C4005: 'ICON_FA_SHIELD_HALVED': macro redefinition
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Fonts\IconsFontAwesome.h(9,9): warning C4005: 'ICON_FA_SHIELD_HALVED': macro redefinition
   (compiling source file 'Gui/Menu/Menu.cpp')
-      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Imgui\ImGuiHelpers.h(26,9):
+      C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Imgui\ImGuiHelpers.h(26,9):
       see previous definition of 'ICON_FA_SHIELD_HALVED'
   
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Fonts\IconsFontAwesome.h(10,9): warning C4005: 'ICON_FA_EYE': macro redefinition
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Fonts\IconsFontAwesome.h(10,9): warning C4005: 'ICON_FA_EYE': macro redefinition
   (compiling source file 'Gui/Menu/Menu.cpp')
-      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Imgui\ImGuiHelpers.h(27,9):
+      C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Imgui\ImGuiHelpers.h(27,9):
       see previous definition of 'ICON_FA_EYE'
   
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Fonts\IconsFontAwesome.h(11,9): warning C4005: 'ICON_FA_WAND_MAGIC': macro redefinition
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Fonts\IconsFontAwesome.h(11,9): warning C4005: 'ICON_FA_WAND_MAGIC': macro redefinition
   (compiling source file 'Gui/Menu/Menu.cpp')
-      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Imgui\ImGuiHelpers.h(28,9):
+      C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Imgui\ImGuiHelpers.h(28,9):
       see previous definition of 'ICON_FA_WAND_MAGIC'
   
-C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Fonts\IconsFontAwesome.h(12,9): warning C4005: 'ICON_FA_CODE': macro redefinition
+C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Fonts\IconsFontAwesome.h(12,9): warning C4005: 'ICON_FA_CODE': macro redefinition
   (compiling source file 'Gui/Menu/Menu.cpp')
-      C:\Users\warzo\Documents\GitHub\Internal-CSGO\Cheat\Gui\Imgui\ImGuiHelpers.h(30,9):
+      C:\Users\warzo\Documents\GitHub\internal-cheat\Cheat\Gui\Imgui\ImGuiHelpers.h(30,9):
       see previous definition of 'ICON_FA_CODE'
   
   MiscSection.cpp
   RagebotSection.cpp
+  RenderUtils.cpp
   SkinsSection.cpp
   VisualsSection.cpp
   main.cpp
   Memory.cpp
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  Previous IPDB was built with incompatible compiler, fall back to full compilation.
-  All 3297 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  3263 of 3300 functions (98.9%) were compiled, the rest were copied from previous compilation.
+    23 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Cheat.vcxproj -> C:\Users\warzo\Documents\Build\CSGO.dll

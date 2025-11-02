@@ -7,6 +7,7 @@ void Menu::DrawRagebotSection(){
 
     static bool aimbot = Aimbot::enabled;
     static float fov = Aimbot::fov;
+    static bool draw_fov_circle = Aimbot::draw_fov_circle;
     static bool silent = Aimbot::silent;
     static bool rcs = Aimbot::rcs;
     static bool visibility_check = Aimbot::visibility_check;
@@ -60,6 +61,13 @@ void Menu::DrawRagebotSection(){
 
     ImGui::SliderFloat("Smooth", &smooth_factor, 1.0f, 20.0f, "%.1f");
     Aimbot::smooth_factor = smooth_factor;
+
+    if (ImGui::Checkbox("Draw FOV Circle", &draw_fov_circle)) {
+        Aimbot::draw_fov_circle = draw_fov_circle;
+    }
+    ImGui::SameLine(); ImGui::TextDisabled("(?)");
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("lmao test");
 
     ImGui::Text("Aim Key: %d (0=Always, 1=LMB, 2=RMB, 4=MMB, 5=X1, 6=X2)", aim_key);
     ImGui::Text("Bones: 8=Head, 6=Neck, 5=Chest");

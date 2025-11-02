@@ -17,6 +17,7 @@
 #include "Skins/SkinsSection.h"
 #include "Configs/ConfigsSection.h"
 #include "Lua/LuasSection.h"
+#include "RenderUtils.h"
 
 namespace Menu {
 
@@ -247,7 +248,7 @@ namespace Menu {
         if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
             Hooks::menu_open = false;
         }
-
+        DrawFovCircle();
         ImGui::End();
         StyleColors::Restore();
 
